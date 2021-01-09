@@ -6,7 +6,8 @@ class User {
 
 class UserData {
   final String uid;
-  final String name;
+  String name;
+  String lastName;
 
-  UserData({this.uid, this.name});
+  UserData({this.uid, this.name, this.lastName});
 }
