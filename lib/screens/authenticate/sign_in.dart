@@ -36,19 +36,20 @@ class _SignInState extends State<SignIn> {
         ],
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+        padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0),
         child: Form(
           key: _formKey,
           child: Column(
             children: <Widget>[
-              SizedBox(height: 20.0),
+              SizedBox(height: 10.0),
               TextFormField(
                 validator: (val) => val.isEmpty ? 'Enter an email' : null,
                 onChanged: (val) {
                   setState(() => email = val);
                 },
+                decoration: InputDecoration(labelText: 'email'),
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 10.0),
               TextFormField(
                 obscureText: true,
                 validator: (val) =>
@@ -56,8 +57,9 @@ class _SignInState extends State<SignIn> {
                 onChanged: (val) {
                   setState(() => password = val);
                 },
+                decoration: InputDecoration(labelText: 'password'),
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 10.0),
               RaisedButton(
                   color: backgroundColor[400],
                   child: Text(
