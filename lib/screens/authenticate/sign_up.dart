@@ -1,5 +1,6 @@
 import 'package:order_tracking/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:order_tracking/services/database.dart';
 import 'package:order_tracking/shared/constants.dart';
 
 class SignUp extends StatefulWidget {
@@ -72,6 +73,9 @@ class _SignUpState extends State<SignUp> {
                         setState(() {
                           error = 'Please supply a valid email';
                         });
+                      } else {
+                        DatabaseService ds = DatabaseService();
+                        ds.updateUserData(result);
                       }
                     }
                   }),
