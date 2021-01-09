@@ -61,7 +61,7 @@ class _SignUpState extends State<SignUp> {
               RaisedButton(
                   color: backgroundColor[400],
                   child: Text(
-                    'Register',
+                    'Sign Up',
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
