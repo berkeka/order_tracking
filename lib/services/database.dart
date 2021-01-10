@@ -10,10 +10,21 @@ class DatabaseService {
       Firestore.instance.collection('Users');
 
   Future<void> updateUserData(UserData userData) async {
-    return await userCollection.document(uid).setData({
+    return await userCollection.document(userData.uid).setData({
       'name': userData.name,
       'lastname': userData.lastName,
       'role': 'customer',
     });
+  }
+
+  Future<UserData> getUserData(String uid) async {
+    UserData userData = UserData(uid: uid);
+    await userCollection.document(uid).get().then((snapshot) {
+      var data = snapshot.data;
+      userData.name = data['name'];
+      userData.lastName = data['lastName'];
+      userData.role = data['role'];
+    });
+    return userData;
   }
 }
