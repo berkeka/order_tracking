@@ -1,5 +1,7 @@
+import 'package:order_tracking/models/user.dart';
 import 'package:order_tracking/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:order_tracking/services/database.dart';
 import 'package:order_tracking/shared/constants.dart';
 
 class SignUp extends StatefulWidget {
@@ -17,6 +19,8 @@ class _SignUpState extends State<SignUp> {
 
   // text field state
   String email = '';
+  String name = '';
+  String lastName = '';
   String password = '';
 
   @override
@@ -36,19 +40,36 @@ class _SignUpState extends State<SignUp> {
         ],
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+        padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0),
         child: Form(
           key: _formKey,
           child: Column(
             children: <Widget>[
-              SizedBox(height: 20.0),
+              SizedBox(height: 10.0),
               TextFormField(
                 validator: (val) => val.isEmpty ? 'Enter an email' : null,
                 onChanged: (val) {
                   setState(() => email = val);
                 },
+                decoration: InputDecoration(labelText: 'email'),
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 10.0),
+              TextFormField(
+                validator: (val) => val.isEmpty ? 'Enter your name' : null,
+                onChanged: (val) {
+                  setState(() => name = val);
+                },
+                decoration: InputDecoration(labelText: 'name'),
+              ),
+              SizedBox(height: 10.0),
+              TextFormField(
+                validator: (val) => val.isEmpty ? 'Enter your lastname' : null,
+                onChanged: (val) {
+                  setState(() => lastName = val);
+                },
+                decoration: InputDecoration(labelText: 'lastname'),
+              ),
+              SizedBox(height: 10.0),
               TextFormField(
                 obscureText: true,
                 validator: (val) =>
@@ -56,12 +77,13 @@ class _SignUpState extends State<SignUp> {
                 onChanged: (val) {
                   setState(() => password = val);
                 },
+                decoration: InputDecoration(labelText: 'password'),
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 10.0),
               RaisedButton(
                   color: backgroundColor[400],
                   child: Text(
-                    'Register',
+                    'Sign Up',
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
@@ -72,6 +94,11 @@ class _SignUpState extends State<SignUp> {
                         setState(() {
                           error = 'Please supply a valid email';
                         });
+                      } else {
+                        DatabaseService ds = DatabaseService();
+                        UserData userData = UserData(
+                            uid: result.uid, name: name, lastName: lastName);
+                        ds.updateUserData(userData);
                       }
                     }
                   }),
