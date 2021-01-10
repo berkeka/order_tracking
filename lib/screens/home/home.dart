@@ -12,6 +12,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
+    Future<UserData> _userData = _databaseService.getUserData(user.uid);
 
     return Container(
       child: Scaffold(
@@ -31,7 +32,79 @@ class Home extends StatelessWidget {
           ],
         ),
         body: Container(
-          child: Text(user.uid),
+          child: FutureBuilder<UserData>(
+            future: _userData, // a previously-obtained Future<String> or null
+            builder: (BuildContext context, AsyncSnapshot<UserData> snapshot) {
+              List<Widget> children;
+              if (snapshot.hasData) {
+                if (snapshot.data.role == 'admin') {
+                  children = <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: Text('${snapshot.data.role}'),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: Text('Name: ${snapshot.data.name}'),
+                    )
+                  ];
+                } else if (snapshot.data.role == 'courier') {
+                  children = <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: Text('${snapshot.data.role}'),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: Text('Name: ${snapshot.data.name}'),
+                    )
+                  ];
+                } else {
+                  children = <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: Text('${snapshot.data.role}'),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: Text('Name: ${snapshot.data.name}'),
+                    )
+                  ];
+                }
+              } else if (snapshot.hasError) {
+                children = <Widget>[
+                  Icon(
+                    Icons.error_outline,
+                    color: Colors.red,
+                    size: 60,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Text('Error: ${snapshot.error}'),
+                  )
+                ];
+              } else {
+                children = <Widget>[
+                  SizedBox(
+                    child: CircularProgressIndicator(),
+                    width: 60,
+                    height: 60,
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: Text('Awaiting result...'),
+                  )
+                ];
+              }
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: children,
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
