@@ -17,7 +17,7 @@ class DatabaseService {
     return await userCollection.document(userData.uid).setData({
       'name': userData.name,
       'lastname': userData.lastname,
-      'role': 'customer',
+      'role': userData.role,
     });
   }
 

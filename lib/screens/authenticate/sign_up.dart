@@ -97,7 +97,10 @@ class _SignUpState extends State<SignUp> {
                       } else {
                         DatabaseService ds = DatabaseService();
                         UserData userData = UserData(
-                            uid: result.uid, name: name, lastname: lastname);
+                            uid: result.uid,
+                            name: name,
+                            lastname: lastname,
+                            role: 'customer');
                         ds.updateUserData(userData);
                       }
                     }
