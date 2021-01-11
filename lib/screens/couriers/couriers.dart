@@ -14,7 +14,7 @@ class _CouriersState extends State<Couriers> {
   DatabaseService _databaseService = DatabaseService();
   @override
   Widget build(BuildContext context) {
-    Future<List<UserData>> _productList = _databaseService.getCouriers();
+    Future<List<UserData>> _courierList = _databaseService.getCouriers();
     UserData selectedCourierData;
     Widget cancelButton = FlatButton(
       child: Text("Cancel"),
@@ -31,7 +31,7 @@ class _CouriersState extends State<Couriers> {
       },
     );
     AlertDialog alert = AlertDialog(
-      title: Text("AlertDialog"),
+      title: Text("Warning"),
       content: Text("Do you want to delete this courier?"),
       actions: [
         cancelButton,
@@ -47,14 +47,14 @@ class _CouriersState extends State<Couriers> {
       backgroundColor: backgroundColor[50],
       body: Container(
         child: FutureBuilder<List<UserData>>(
-          future: _productList,
+          future: _courierList,
           builder:
               (BuildContext context, AsyncSnapshot<List<UserData>> snapshot) {
             List<Widget> children;
             if (snapshot.hasData) {
               children = <Widget>[];
-              List<UserData> productList = snapshot.data;
-              productList.forEach((user) {
+              List<UserData> courierList = snapshot.data;
+              courierList.forEach((user) {
                 children.add(Card(
                     child: ListTile(
                   title: Text("${user.name} ${user.lastname}"),
