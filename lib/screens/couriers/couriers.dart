@@ -59,7 +59,7 @@ class _CouriersState extends State<Couriers> {
                 ),
                 const Padding(
                   padding: EdgeInsets.only(top: 16),
-                  child: Text('Awaiting product data...'),
+                  child: Text('Awaiting courier data...'),
                 )
               ];
               return Center(
