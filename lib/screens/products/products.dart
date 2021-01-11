@@ -61,6 +61,13 @@ class _ProductsState extends State<Products> {
                   child: Text('Awaiting product data...'),
                 )
               ];
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: children,
+                ),
+              );
             }
             return Center(
               child: Column(
