@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:order_tracking/models/user.dart';
+import 'package:order_tracking/models/order.dart';
 import 'package:order_tracking/shared/constants.dart';
+import 'package:order_tracking/services/database.dart';
 
 class Orders extends StatefulWidget {
   final UserData userData;
@@ -10,8 +12,10 @@ class Orders extends StatefulWidget {
 }
 
 class _OrdersState extends State<Orders> {
+  DatabaseService _databaseService = DatabaseService();
   @override
   Widget build(BuildContext context) {
+    Future<List<Order>> _orderList = _databaseService.getOrders();
     return Scaffold(
       appBar: AppBar(
         title: Text(projectName),
@@ -20,8 +24,61 @@ class _OrdersState extends State<Orders> {
       ),
       backgroundColor: backgroundColor[50],
       body: Container(
-        child: Column(
-          children: [Text(widget.userData.role + " Orders screen")],
+        child: FutureBuilder<List<Order>>(
+          future: _orderList,
+          builder: (BuildContext context, AsyncSnapshot<List<Order>> snapshot) {
+            List<Widget> children;
+            if (snapshot.hasData) {
+              children = <Widget>[];
+              List<Order> orderList = snapshot.data;
+              orderList.forEach((order) {
+                children.add(Card(
+                    child: ListTile(
+                  title: Text(order.orderid),
+                  subtitle: Text("Order Date: " + order.orderdate.toString()),
+                  tileColor: backgroundColor[25],
+                )));
+              });
+            } else if (snapshot.hasError) {
+              children = <Widget>[
+                Icon(
+                  Icons.error_outline,
+                  color: Colors.red,
+                  size: 60,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: Text('Error: ${snapshot.error}'),
+                )
+              ];
+            } else {
+              children = <Widget>[
+                SizedBox(
+                  child: CircularProgressIndicator(),
+                  width: 60,
+                  height: 60,
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 16),
+                  child: Text('Awaiting order data...'),
+                )
+              ];
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: children,
+                ),
+              );
+            }
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: children,
+              ),
+            );
+          },
         ),
       ),
     );

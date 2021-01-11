@@ -1,5 +1,6 @@
 import 'package:order_tracking/models/product.dart';
 import 'package:order_tracking/models/user.dart';
+import 'package:order_tracking/models/order.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseService {
@@ -12,6 +13,9 @@ class DatabaseService {
 
   final CollectionReference productCollection =
       Firestore.instance.collection('Products');
+
+  final CollectionReference orderCollection =
+      Firestore.instance.collection('Orders');
 
   Future<void> updateUserData(UserData userData) async {
     return await userCollection.document(userData.uid).setData({
@@ -47,6 +51,25 @@ class DatabaseService {
       });
     });
     return courierList;
+  }
+
+  Future<List<Order>> getOrders() async {
+    List<Order> orderList = List<Order>();
+    await orderCollection
+        .where('isdelivered', isEqualTo: false)
+        .getDocuments()
+        .then((snapshot) {
+      snapshot.documents.forEach((order) {
+        Timestamp orderts = order.data['orderdate'];
+        orderList.add(Order(
+            orderid: order.documentID,
+            courierid: order.data['courierid'],
+            customerid: order.data['customerid'],
+            products: order.data['products'],
+            orderdate: orderts.toDate()));
+      });
+    });
+    return orderList;
   }
 
   Future<List<Product>> getProducts() async {
