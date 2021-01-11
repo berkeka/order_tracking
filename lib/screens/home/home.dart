@@ -66,8 +66,8 @@ class _HomeState extends State<Home> {
               // Set widget options for navbar
               _widgetOptions = <Widget>[
                 HomeContent(userData: userData),
-                Products(userData: userData),
                 Map(userData: userData),
+                Products(userData: userData),
               ];
               // If userdata is present return selected screen
               return Scaffold(
