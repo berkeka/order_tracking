@@ -16,7 +16,7 @@ class DatabaseService {
   Future<void> updateUserData(UserData userData) async {
     return await userCollection.document(userData.uid).setData({
       'name': userData.name,
-      'lastname': userData.lastName,
+      'lastname': userData.lastname,
       'role': 'customer',
     });
   }
@@ -26,7 +26,7 @@ class DatabaseService {
     await userCollection.document(uid).get().then((snapshot) {
       var data = snapshot.data;
       userData.name = data['name'];
-      userData.lastName = data['lastname'];
+      userData.lastname = data['lastname'];
       userData.role = data['role'];
     });
     return userData;
@@ -42,7 +42,7 @@ class DatabaseService {
         courierList.add(UserData(
             uid: user.documentID,
             name: user.data['name'],
-            lastName: user.data['lastname'],
+            lastname: user.data['lastname'],
             role: user.data['role']));
       });
     });

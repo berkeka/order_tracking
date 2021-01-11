@@ -34,7 +34,7 @@ class _CouriersState extends State<Couriers> {
               productList.forEach((user) {
                 children.add(Card(
                     child: ListTile(
-                  title: Text("${user.name} ${user.lastName}"),
+                  title: Text("${user.name} ${user.lastname}"),
                   tileColor: backgroundColor[25],
                 )));
               });

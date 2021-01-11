@@ -61,7 +61,7 @@ class _HomeState extends State<Home> {
               UserData userData = UserData(
                   uid: snapshot.data.uid,
                   name: snapshot.data.name,
-                  lastName: snapshot.data.lastName,
+                  lastname: snapshot.data.lastname,
                   role: snapshot.data.role);
               // Set widget options for navbar
               _widgetOptions = <Widget>[
