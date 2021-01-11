@@ -26,10 +26,27 @@ class DatabaseService {
     await userCollection.document(uid).get().then((snapshot) {
       var data = snapshot.data;
       userData.name = data['name'];
-      userData.lastName = data['lastName'];
+      userData.lastName = data['lastname'];
       userData.role = data['role'];
     });
     return userData;
+  }
+
+  Future<List<UserData>> getCouriers() async {
+    List<UserData> courierList = List<UserData>();
+    await userCollection
+        .where('role', isEqualTo: 'courier')
+        .getDocuments()
+        .then((snapshot) {
+      snapshot.documents.forEach((user) {
+        courierList.add(UserData(
+            uid: user.documentID,
+            name: user.data['name'],
+            lastName: user.data['lastname'],
+            role: user.data['role']));
+      });
+    });
+    return courierList;
   }
 
   Future<List<Product>> getProducts() async {
