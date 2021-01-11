@@ -15,6 +15,29 @@ class _CouriersState extends State<Couriers> {
   @override
   Widget build(BuildContext context) {
     Future<List<UserData>> _productList = _databaseService.getCouriers();
+    UserData selectedCourierData;
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Continue"),
+      onPressed: () {
+        selectedCourierData.role = 'customer';
+        _databaseService.updateUserData(selectedCourierData);
+        Navigator.of(context).pop();
+      },
+    );
+    AlertDialog alert = AlertDialog(
+      title: Text("AlertDialog"),
+      content: Text("Do you want to delete this courier?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text(projectName),
@@ -36,6 +59,22 @@ class _CouriersState extends State<Couriers> {
                     child: ListTile(
                   title: Text("${user.name} ${user.lastname}"),
                   tileColor: backgroundColor[25],
+                  trailing: Wrap(
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.remove_circle_outline),
+                        onPressed: () {
+                          selectedCourierData = user;
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return alert;
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 )));
               });
             } else if (snapshot.hasError) {
