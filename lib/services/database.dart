@@ -36,9 +36,8 @@ class DatabaseService {
     List<Product> productList = List<Product>();
     await productCollection.getDocuments().then((snapshot) {
       snapshot.documents.forEach((doc) {
-        int price = doc.data['price'];
-        productList
-            .add(Product(name: doc.data['name'], price: price.toDouble()));
+        double price = double.parse(doc.data['price']);
+        productList.add(Product(name: doc.data['name'], price: price));
       });
     });
     return productList;
