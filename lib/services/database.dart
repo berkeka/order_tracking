@@ -35,6 +35,21 @@ class DatabaseService {
     });
   }
 
+  Future updateProductData(Product product) async {
+    //print(product.name + " " + product.price.toString());
+    return await productCollection.document(product.productid).setData({
+      'name': product.name,
+      'price': product.price.toString(),
+    });
+  }
+
+  Future createProductData(Product product) async {
+    return await productCollection.document().setData({
+      'name': product.name,
+      'price': product.price.toString(),
+    });
+  }
+
   Future<UserData> getUserData(String uid) async {
     UserData userData = UserData(uid: uid);
     await userCollection.document(uid).get().then((snapshot) {
@@ -88,7 +103,8 @@ class DatabaseService {
     await productCollection.getDocuments().then((snapshot) {
       snapshot.documents.forEach((doc) {
         double price = double.parse(doc.data['price']);
-        productList.add(Product(name: doc.data['name'], price: price));
+        productList.add(Product(
+            name: doc.data['name'], price: price, productid: doc.documentID));
       });
     });
     return productList;

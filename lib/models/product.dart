@@ -1,6 +1,7 @@
 class Product {
-  final String name;
-  final double price;
+  String productid;
+  String name;
+  double price;
 
-  Product({this.name, this.price});
+  Product({this.productid, this.name, this.price});
 }
