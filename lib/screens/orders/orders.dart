@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:order_tracking/models/user.dart';
 import 'package:order_tracking/models/order.dart';
@@ -47,7 +49,7 @@ class _OrdersState extends State<Orders> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => ChooseCourier(order: order)),
-                      );
+                      ).then(onGoBack);
                     },
                   );
                 } else {
@@ -110,5 +112,9 @@ class _OrdersState extends State<Orders> {
         ),
       ),
     );
+  }
+
+  FutureOr onGoBack(dynamic value) {
+    setState(() {});
   }
 }
