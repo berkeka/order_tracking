@@ -6,11 +6,13 @@ class Order {
   String customerid;
   List<dynamic> products;
   DateTime orderdate;
+  bool isdelivered;
 
   Order(
       {this.orderid,
       this.courierid,
       this.customerid,
       this.products,
-      this.orderdate});
+      this.orderdate,
+      this.isdelivered});
 }

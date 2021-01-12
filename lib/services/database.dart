@@ -25,6 +25,16 @@ class DatabaseService {
     });
   }
 
+  Future<void> updateOrderData(Order order) async {
+    return await orderCollection.document(order.orderid).setData({
+      'courierid': order.courierid,
+      'customerid': order.customerid,
+      'isdelivered': order.isdelivered,
+      'orderdate': Timestamp.fromDate(order.orderdate),
+      'products': order.products,
+    });
+  }
+
   Future<UserData> getUserData(String uid) async {
     UserData userData = UserData(uid: uid);
     await userCollection.document(uid).get().then((snapshot) {
@@ -66,7 +76,8 @@ class DatabaseService {
             courierid: order.data['courierid'],
             customerid: order.data['customerid'],
             products: order.data['products'],
-            orderdate: orderts.toDate()));
+            orderdate: orderts.toDate(),
+            isdelivered: false));
       });
     });
     return orderList;

@@ -1,22 +1,46 @@
 import 'package:flutter/material.dart';
-import 'package:order_tracking/models/user.dart';
 import 'package:order_tracking/models/order.dart';
-import 'package:order_tracking/screens/couriers/choose_courier.dart';
+import 'package:order_tracking/models/user.dart';
 import 'package:order_tracking/shared/constants.dart';
 import 'package:order_tracking/services/database.dart';
 
-class Orders extends StatefulWidget {
-  final UserData userData;
-  Orders({@required this.userData});
+class ChooseCourier extends StatefulWidget {
+  final Order order;
+  ChooseCourier({@required this.order});
   @override
-  _OrdersState createState() => _OrdersState();
+  _ChooseCourierState createState() => _ChooseCourierState();
 }
 
-class _OrdersState extends State<Orders> {
+class _ChooseCourierState extends State<ChooseCourier> {
   DatabaseService _databaseService = DatabaseService();
   @override
   Widget build(BuildContext context) {
-    Future<List<Order>> _orderList = _databaseService.getOrders();
+    Future<List<UserData>> _courierList = _databaseService.getCouriers();
+    String selectedCourierID;
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Continue"),
+      onPressed: () {
+        Order newOrder = widget.order;
+        newOrder.courierid = selectedCourierID;
+        _databaseService.updateOrderData(newOrder);
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+      },
+    );
+    AlertDialog alert = AlertDialog(
+      title: Text("Warning"),
+      content: Text("Do you want to select this courier?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text(projectName),
@@ -25,46 +49,35 @@ class _OrdersState extends State<Orders> {
       ),
       backgroundColor: backgroundColor[50],
       body: Container(
-        child: FutureBuilder<List<Order>>(
-          future: _orderList,
-          builder: (BuildContext context, AsyncSnapshot<List<Order>> snapshot) {
+        child: FutureBuilder<List<UserData>>(
+          future: _courierList,
+          builder:
+              (BuildContext context, AsyncSnapshot<List<UserData>> snapshot) {
             List<Widget> children;
             if (snapshot.hasData) {
               children = <Widget>[];
-              List<Order> orderList = snapshot.data;
-              orderList.forEach((order) {
-                Color color;
-                Widget trailing;
-                if (order.courierid == '') {
-                  color = Colors.red[300];
-                  trailing = IconButton(
-                    icon: Icon(
-                      Icons.add,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ChooseCourier(order: order)),
-                      );
-                    },
-                  );
-                } else {
-                  color = Colors.green[300];
-                  trailing = null;
-                }
+              List<UserData> courierList = snapshot.data;
+              courierList.forEach((user) {
                 children.add(Card(
                     child: ListTile(
-                  title: Text(order.orderid),
-                  subtitle: Text("Order Date: " + order.orderdate.toString()),
-                  leading: Icon(
-                    Icons.circle,
-                    color: color,
-                    size: 45,
-                  ),
-                  trailing: trailing,
+                  title: Text("${user.name} ${user.lastname}"),
                   tileColor: backgroundColor[25],
+                  trailing: Wrap(
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.add),
+                        onPressed: () {
+                          selectedCourierID = user.uid;
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return alert;
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 )));
               });
             } else if (snapshot.hasError) {
@@ -88,7 +101,7 @@ class _OrdersState extends State<Orders> {
                 ),
                 const Padding(
                   padding: EdgeInsets.only(top: 16),
-                  child: Text('Awaiting order data...'),
+                  child: Text('Awaiting courier data...'),
                 )
               ];
               return Center(
