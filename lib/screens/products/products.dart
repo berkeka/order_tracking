@@ -23,6 +23,28 @@ class _ProductsState extends State<Products> {
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
     Future<List<Product>> _productList = _databaseService.getProducts();
+    String selectedProductId;
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Continue"),
+      onPressed: () {
+        _databaseService.deleteProduct(selectedProductId);
+        Navigator.of(context).pop();
+      },
+    );
+    AlertDialog alert = AlertDialog(
+      title: Text("Warning"),
+      content: Text("Do you want to delete this product?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
     return Scaffold(
       backgroundColor: backgroundColor[50],
       body: Container(
@@ -36,6 +58,23 @@ class _ProductsState extends State<Products> {
               productList.forEach((product) {
                 List<Widget> buttonChildren = [];
                 if (widget.userData.role == 'admin') {
+                  buttonChildren.add(
+                    IconButton(
+                      icon: Icon(
+                        Icons.remove_circle_outline,
+                        color: Colors.red[400],
+                      ),
+                      onPressed: () {
+                        selectedProductId = product.productid;
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return alert;
+                          },
+                        ).then(onGoBack);
+                      },
+                    ),
+                  );
                   buttonChildren.add(
                     IconButton(
                       icon: Icon(Icons.edit),
@@ -53,7 +92,7 @@ class _ProductsState extends State<Products> {
                 }
                 buttonChildren.add(
                   IconButton(
-                    icon: Icon(Icons.info),
+                    icon: Icon(Icons.info_outline),
                     onPressed: () {
                       Navigator.push(
                         context,

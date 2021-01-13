@@ -50,6 +50,10 @@ class DatabaseService {
     });
   }
 
+  Future deleteProduct(String productid) async {
+    await productCollection.document(productid).delete();
+  }
+
   Future<UserData> getUserData(String uid) async {
     UserData userData = UserData(uid: uid);
     await userCollection.document(uid).get().then((snapshot) {
