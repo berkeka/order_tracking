@@ -24,9 +24,6 @@ class _ProductEditState extends State<ProductEdit> {
   @override
   void initState() {
     super.initState();
-
-    nameController.addListener(_printLatestValue(nameController));
-    priceController.addListener(_printLatestValue(priceController));
   }
 
   @override
@@ -35,10 +32,6 @@ class _ProductEditState extends State<ProductEdit> {
     nameController.dispose();
     priceController.dispose();
     super.dispose();
-  }
-
-  _printLatestValue(TextEditingController tec) {
-    print("Second text field: ${tec.text}");
   }
 
   @override
