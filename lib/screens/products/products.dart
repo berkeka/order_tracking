@@ -53,6 +53,11 @@ class _ProductsState extends State<Products> {
           builder:
               (BuildContext context, AsyncSnapshot<List<Product>> snapshot) {
             List<Widget> children = <Widget>[];
+            List<Widget> finalChildren = [
+              ListView(
+                children: children,
+              ),
+            ];
             if (snapshot.hasData) {
               List<Product> productList = snapshot.data;
               productList.forEach((product) {
@@ -87,6 +92,32 @@ class _ProductsState extends State<Products> {
                                   ProductEdit(product: product)),
                         ).then(onGoBack);
                       },
+                    ),
+                  );
+                  finalChildren.add(
+                    Positioned(
+                      left: 10.0,
+                      bottom: 10.0,
+                      child: Container(
+                        width: 75.0,
+                        height: 75.0,
+                        child: IconButton(
+                            padding: const EdgeInsets.all(0),
+                            icon: Icon(
+                              Icons.add_box,
+                              color: backgroundColor[400],
+                              size: 70,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        // Product edit page
+                                        ProductAdd()),
+                              ).then(onGoBack);
+                            }),
+                      ),
                     ),
                   );
                 }
@@ -173,8 +204,8 @@ class _ProductsState extends State<Products> {
               */
             }
             return Center(
-              child: ListView(
-                children: children,
+              child: Stack(
+                children: finalChildren,
               ),
             );
           },
@@ -183,6 +214,9 @@ class _ProductsState extends State<Products> {
     );
   }
 
+  /*
+
+*/
   // Refresh page on fallback
   FutureOr onGoBack(dynamic value) {
     setState(() {});
