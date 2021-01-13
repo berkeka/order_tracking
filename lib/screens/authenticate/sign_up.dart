@@ -20,7 +20,7 @@ class _SignUpState extends State<SignUp> {
   // text field state
   String email = '';
   String name = '';
-  String lastName = '';
+  String lastname = '';
   String password = '';
 
   @override
@@ -65,7 +65,7 @@ class _SignUpState extends State<SignUp> {
               TextFormField(
                 validator: (val) => val.isEmpty ? 'Enter your lastname' : null,
                 onChanged: (val) {
-                  setState(() => lastName = val);
+                  setState(() => lastname = val);
                 },
                 decoration: InputDecoration(labelText: 'lastname'),
               ),
@@ -97,7 +97,10 @@ class _SignUpState extends State<SignUp> {
                       } else {
                         DatabaseService ds = DatabaseService();
                         UserData userData = UserData(
-                            uid: result.uid, name: name, lastName: lastName);
+                            uid: result.uid,
+                            name: name,
+                            lastname: lastname,
+                            role: 'customer');
                         ds.updateUserData(userData);
                       }
                     }

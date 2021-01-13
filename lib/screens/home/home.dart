@@ -32,22 +32,13 @@ class _HomeState extends State<Home> {
     User user = Provider.of<User>(context);
     // Get user data as a future
     Future<UserData> _userData = _databaseService.getUserData(user.uid);
-
+    List<Widget> actions = <Widget>[];
     return Scaffold(
       appBar: AppBar(
-        title: Text(projectName),
-        backgroundColor: backgroundColor[400],
-        elevation: 0.0,
-        actions: <Widget>[
-          FlatButton.icon(
-            icon: Icon(Icons.person),
-            label: Text('Logout'),
-            onPressed: () async {
-              await _auth.signOut();
-            },
-          ),
-        ],
-      ),
+          title: Text(projectName),
+          backgroundColor: backgroundColor[400],
+          elevation: 0.0,
+          actions: actions),
       body: Container(
         // This future builder will work until we receive the user data
         // Until we receive the data we will return a loading circle
@@ -61,14 +52,34 @@ class _HomeState extends State<Home> {
               UserData userData = UserData(
                   uid: snapshot.data.uid,
                   name: snapshot.data.name,
-                  lastName: snapshot.data.lastName,
+                  lastname: snapshot.data.lastname,
                   role: snapshot.data.role);
               // Set widget options for navbar
               _widgetOptions = <Widget>[
                 HomeContent(userData: userData),
-                Products(userData: userData),
                 Map(userData: userData),
+                Products(userData: userData),
               ];
+              if (userData.role == 'customer') {
+                actions.add(
+                  IconButton(
+                    icon: Icon(Icons.shopping_cart),
+                    color: Colors.black,
+                    onPressed: () {
+                      // Navigate to cart page
+                    },
+                  ),
+                );
+              }
+              actions.add(
+                FlatButton.icon(
+                  icon: Icon(Icons.person),
+                  label: Text('Logout'),
+                  onPressed: () async {
+                    await _auth.signOut();
+                  },
+                ),
+              );
               // If userdata is present return selected screen
               return Scaffold(
                 body: Center(
