@@ -113,9 +113,7 @@ class _ChooseCourierState extends State<ChooseCourier> {
               );
             }
             return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: ListView(
                 children: children,
               ),
             );

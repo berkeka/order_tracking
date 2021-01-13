@@ -173,9 +173,7 @@ class _ProductsState extends State<Products> {
               */
             }
             return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: ListView(
                 children: children,
               ),
             );

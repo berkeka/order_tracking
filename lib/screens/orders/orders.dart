@@ -102,9 +102,7 @@ class _OrdersState extends State<Orders> {
               );
             }
             return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: ListView(
                 children: children,
               ),
             );
