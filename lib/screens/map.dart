@@ -35,8 +35,22 @@ class _MapState extends State<Map> {
       zoom: 19.151926040649414);
   @override
   Widget build(BuildContext context) {
-    Future<List<CourierLocation>> _locations =
-        _databaseService.getCourierLocations();
+    Future<List<CourierLocation>> _locations;
+    switch (widget.userData.role) {
+      case 'customer':
+        // Customer will see only the couriers that will deliver them their orders
+        _locations =
+            _databaseService.getCouriersForCustomer(widget.userData.uid);
+        break;
+      case 'courier':
+        // Courier will see only the address the address he/she needs to deliver
+        _locations =
+            _databaseService.getDeliveryLocationforCourier(widget.userData.uid);
+        break;
+      default:
+        // Admin will see all of the couriers on the map
+        _locations = _databaseService.getCourierLocations();
+    }
     return Scaffold(
       backgroundColor: backgroundColor[50],
       body: Container(
