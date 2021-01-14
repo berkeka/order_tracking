@@ -54,7 +54,6 @@ class _ProductViewState extends State<ProductView> {
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 child: Text(product.description, style: TextStyle(fontSize: 14),)
-                //child: Text(product.description)
               )
             ),
             Container(
