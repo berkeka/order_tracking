@@ -17,6 +17,9 @@ class DatabaseService {
   final CollectionReference orderCollection =
       Firestore.instance.collection('Orders');
 
+  final CollectionReference courierLocationCollection =
+      Firestore.instance.collection('CourierLocations');
+
   Future<void> updateUserData(UserData userData) async {
     return await userCollection.document(userData.uid).setData({
       'name': userData.name,
@@ -40,6 +43,22 @@ class DatabaseService {
     return await productCollection.document(product.productid).setData({
       'name': product.name,
       'price': product.price.toString(),
+    });
+  }
+
+  Future createCourierLocation(String courierID) async {
+    return await courierLocationCollection.document(courierID).setData({
+      'hasorder': false,
+      'location': GeoPoint(0.0, 0.0),
+    });
+  }
+
+  Future updateCourierLocation(CourierLocation courierLocation) async {
+    return await courierLocationCollection
+        .document(courierLocation.uid)
+        .updateData({
+      'hasorder': courierLocation.hasorder,
+      'location': courierLocation.location,
     });
   }
 
@@ -112,5 +131,68 @@ class DatabaseService {
       });
     });
     return productList;
+  }
+
+  Future<List<CourierLocation>> getCourierLocations() async {
+    List<CourierLocation> _courierLocations = List<CourierLocation>();
+    await courierLocationCollection.getDocuments().then((snapshot) {
+      snapshot.documents.forEach((document) {
+        _courierLocations.add(CourierLocation(
+          uid: document.documentID,
+          location: document.data['location'],
+          hasorder: document.data['hasorder'],
+        ));
+      });
+    });
+    return _courierLocations;
+  }
+
+  Future<List<CourierLocation>> getCouriersForCustomer(
+      String customerid) async {
+    List<int> _courierIDs = List<int>();
+    List<CourierLocation> _courierLocations = List<CourierLocation>();
+    // Get courier ids for every order which are related to our customer and not delivered
+    await orderCollection.getDocuments().then((snapshot) {
+      snapshot.documents
+          .where((document) =>
+              document.data['isdelivered'] == false &&
+              document.data['customerid'] == customerid)
+          .forEach((order) {
+        _courierIDs.add(order.data['courierid']);
+      });
+    });
+
+    // Using the courier ids we gathered in the method above
+    // We now get locations of our couriers
+    await courierLocationCollection.getDocuments().then((snapshot) {
+      snapshot.documents.forEach((document) {
+        if (_courierIDs.contains(document.data['courierid'])) {
+          _courierLocations.add(CourierLocation(
+            uid: document.documentID,
+            location: document.data['location'],
+            hasorder: document.data['hasorder'],
+          ));
+        }
+      });
+    });
+    return _courierLocations;
+  }
+
+  Future<List<CourierLocation>> getDeliveryLocationforCourier(
+      String courierid) async {
+    List<CourierLocation> _deliveryLocations = List<CourierLocation>();
+    // Get courier ids for every order which are related to our customer and not delivered
+    await orderCollection.getDocuments().then((snapshot) {
+      snapshot.documents
+          .where((document) =>
+              document.data['isdelivered'] == false &&
+              document.data['courierid'] == courierid)
+          .forEach((order) {
+        _deliveryLocations.add(CourierLocation(
+            uid: order.data['customerid'],
+            location: order.data['deliverylocation']));
+      });
+    });
+    return _deliveryLocations;
   }
 }

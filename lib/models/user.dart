@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class User {
   final String uid;
 
@@ -11,4 +13,11 @@ class UserData {
   String role;
 
   UserData({this.uid, this.name, this.lastname, this.role});
+}
+
+class CourierLocation {
+  final String uid;
+  GeoPoint location;
+  bool hasorder;
+  CourierLocation({this.uid, this.location, this.hasorder});
 }
