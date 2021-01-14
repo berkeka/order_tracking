@@ -161,4 +161,22 @@ class DatabaseService {
     });
     return _courierLocations;
   }
+
+  Future<List<CourierLocation>> getDeliveryLocationforCourier(
+      String courierid) async {
+    List<CourierLocation> _deliveryLocations = List<CourierLocation>();
+    // Get courier ids for every order which are related to our customer and not delivered
+    await orderCollection.getDocuments().then((snapshot) {
+      snapshot.documents
+          .where((document) =>
+              document.data['isdelivered'] == false &&
+              document.data['courierid'] == courierid)
+          .forEach((order) {
+        _deliveryLocations.add(CourierLocation(
+            uid: order.data['customerid'],
+            location: order.data['deliverylocation']));
+      });
+    });
+    return _deliveryLocations;
+  }
 }
