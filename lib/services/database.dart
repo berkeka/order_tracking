@@ -130,4 +130,35 @@ class DatabaseService {
     });
     return _courierLocations;
   }
+
+  Future<List<CourierLocation>> getCouriersForCustomer(
+      String customerid) async {
+    List<int> _courierIDs = List<int>();
+    List<CourierLocation> _courierLocations = List<CourierLocation>();
+    // Get courier ids for every order which are related to our customer and not delivered
+    await orderCollection.getDocuments().then((snapshot) {
+      snapshot.documents
+          .where((document) =>
+              document.data['isdelivered'] == false &&
+              document.data['customerid'] == customerid)
+          .forEach((order) {
+        _courierIDs.add(order.data['courierid']);
+      });
+    });
+
+    // Using the courier ids we gathered in the method above
+    // We now get locations of our couriers
+    await courierLocationCollection.getDocuments().then((snapshot) {
+      snapshot.documents.forEach((document) {
+        if (_courierIDs.contains(document.data['courierid'])) {
+          _courierLocations.add(CourierLocation(
+            uid: document.documentID,
+            location: document.data['location'],
+            hasorder: document.data['hasorder'],
+          ));
+        }
+      });
+    });
+    return _courierLocations;
+  }
 }
