@@ -46,6 +46,22 @@ class DatabaseService {
     });
   }
 
+  Future createCourierLocation(String courierID) async {
+    return await courierLocationCollection.document(courierID).setData({
+      'hasorder': false,
+      'location': GeoPoint(0.0, 0.0),
+    });
+  }
+
+  Future updateCourierLocation(CourierLocation courierLocation) async {
+    return await courierLocationCollection
+        .document(courierLocation.uid)
+        .updateData({
+      'hasorder': courierLocation.hasorder,
+      'location': courierLocation.location,
+    });
+  }
+
   Future createProductData(Product product) async {
     return await productCollection.document().setData({
       'name': product.name,
