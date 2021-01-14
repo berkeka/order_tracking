@@ -32,7 +32,15 @@ class _HomeState extends State<Home> {
     User user = Provider.of<User>(context);
     // Get user data as a future
     Future<UserData> _userData = _databaseService.getUserData(user.uid);
-    List<Widget> actions = <Widget>[];
+    List<Widget> actions = <Widget>[
+      FlatButton.icon(
+        icon: Icon(Icons.person),
+        label: Text('Logout'),
+        onPressed: () async {
+          await _auth.signOut();
+        },
+      ),
+    ];
     return Scaffold(
       appBar: AppBar(
           title: Text(projectName),
@@ -60,8 +68,9 @@ class _HomeState extends State<Home> {
                 Map(userData: userData),
                 Products(userData: userData),
               ];
-              if (userData.role == 'customer') {
-                actions.add(
+              if (userData.role == 'customer' && _selectedIndex == 2) {
+                actions.insert(
+                  0,
                   IconButton(
                     icon: Icon(Icons.shopping_cart),
                     color: Colors.black,
@@ -71,15 +80,6 @@ class _HomeState extends State<Home> {
                   ),
                 );
               }
-              actions.add(
-                FlatButton.icon(
-                  icon: Icon(Icons.person),
-                  label: Text('Logout'),
-                  onPressed: () async {
-                    await _auth.signOut();
-                  },
-                ),
-              );
               // If userdata is present return selected screen
               return Scaffold(
                 body: Center(

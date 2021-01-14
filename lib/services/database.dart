@@ -17,6 +17,9 @@ class DatabaseService {
   final CollectionReference orderCollection =
       Firestore.instance.collection('Orders');
 
+  final CollectionReference courierLocationCollection =
+      Firestore.instance.collection('CourierLocations');
+
   Future<void> updateUserData(UserData userData) async {
     return await userCollection.document(userData.uid).setData({
       'name': userData.name,
@@ -112,5 +115,19 @@ class DatabaseService {
       });
     });
     return productList;
+  }
+
+  Future<List<CourierLocation>> getCourierLocations() async {
+    List<CourierLocation> _courierLocations = List<CourierLocation>();
+    await courierLocationCollection.getDocuments().then((snapshot) {
+      snapshot.documents.forEach((document) {
+        _courierLocations.add(CourierLocation(
+          uid: document.documentID,
+          location: document.data['location'],
+          hasorder: document.data['hasorder'],
+        ));
+      });
+    });
+    return _courierLocations;
   }
 }
