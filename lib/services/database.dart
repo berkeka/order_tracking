@@ -46,6 +46,7 @@ class DatabaseService {
   Future createProductData(Product product) async {
     return await productCollection.document().setData({
       'name': product.name,
+      'description': product.description,
       'price': product.price.toString(),
     });
   }
@@ -108,7 +109,7 @@ class DatabaseService {
       snapshot.documents.forEach((doc) {
         double price = double.parse(doc.data['price']);
         productList.add(Product(
-            name: doc.data['name'], price: price, productid: doc.documentID));
+            name: doc.data['name'], description: doc.data['description'], price: price, productid: doc.documentID));
       });
     });
     return productList;

@@ -121,7 +121,8 @@ class _ProductsState extends State<Products> {
                     ),
                   );
                 }
-                buttonChildren.add(
+                if(widget.userData.role == "customer") {
+                  buttonChildren.add(
                   IconButton(
                     icon: Icon(Icons.info_outline),
                     onPressed: () {
@@ -130,10 +131,11 @@ class _ProductsState extends State<Products> {
                         MaterialPageRoute(
                             builder: (context) =>
                                 ProductView(product: product)),
-                      );
+                      ).then(onGoBack);
                     },
                   ),
                 );
+                }
                 children.add(Card(
                     child: ListTile(
                   title: Text(product.name),
