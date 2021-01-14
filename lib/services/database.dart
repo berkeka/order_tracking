@@ -39,6 +39,7 @@ class DatabaseService {
     //print(product.name + " " + product.price.toString());
     return await productCollection.document(product.productid).setData({
       'name': product.name,
+      'description' : product.description,
       'price': product.price.toString(),
     });
   }

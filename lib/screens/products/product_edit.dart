@@ -17,9 +17,11 @@ class _ProductEditState extends State<ProductEdit> {
   String error = '';
   String name = '';
   String price = "0.0";
+  String description = '';
 
   final nameController = TextEditingController();
   final priceController = TextEditingController();
+  final descriptionController = TextEditingController();
 
   @override
   void initState() {
@@ -31,6 +33,7 @@ class _ProductEditState extends State<ProductEdit> {
     // Clean up the controller when the widget is disposed.
     nameController.dispose();
     priceController.dispose();
+    descriptionController.dispose();
     super.dispose();
   }
 
@@ -65,6 +68,11 @@ class _ProductEditState extends State<ProductEdit> {
                 controller: priceController,
               ),
               SizedBox(height: 10.0),
+              Text('Description'),
+              TextFormField(
+                controller: descriptionController,
+              ),
+              SizedBox(height: 10.0),
               RaisedButton(
                   color: backgroundColor[400],
                   child: Text(
@@ -73,11 +81,13 @@ class _ProductEditState extends State<ProductEdit> {
                   ),
                   onPressed: () {
                     if (nameController.text != "" &&
-                        priceController.text != "") {
+                        priceController.text != "" &&
+                        descriptionController.text != "") {
                       Product newProduct = Product(
                           productid: product.productid,
                           name: nameController.text,
-                          price: double.parse(priceController.text));
+                          price: double.parse(priceController.text),
+                          description: descriptionController.text);
                       _databaseService.updateProductData(newProduct);
                       Navigator.of(context).pop();
                     } else {

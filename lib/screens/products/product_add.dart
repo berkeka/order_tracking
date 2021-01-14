@@ -15,6 +15,7 @@ class _ProductAddState extends State<ProductAdd> {
   String error = '';
   String name = '';
   String price = '';
+  String description = '';
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +50,15 @@ class _ProductAddState extends State<ProductAdd> {
                 },
               ),
               SizedBox(height: 10.0),
+              Text('Description'),
+              TextFormField(
+                validator: (val) =>
+                    val.isEmpty ? 'Enter a different description' : null,
+                onChanged: (val) {
+                  setState(() => description = val);
+                },
+              ),
+              SizedBox(height: 10.0),
               RaisedButton(
                   color: backgroundColor[400],
                   child: Text(
@@ -58,7 +68,7 @@ class _ProductAddState extends State<ProductAdd> {
                   onPressed: () async {
                     if (_formKey.currentState.validate()) {
                       Product newProduct =
-                          Product(name: name, price: double.parse(price));
+                          Product(name: name, description: description, price: double.parse(price));
                       _databaseService.createProductData(newProduct);
                       Navigator.of(context).pop();
                     }
