@@ -5,6 +5,8 @@ import 'package:order_tracking/models/user.dart';
 import 'package:order_tracking/shared/constants.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:order_tracking/services/database.dart';
+import 'package:order_tracking/services/location_service.dart';
+import 'package:provider/provider.dart';
 
 class Map extends StatefulWidget {
   final UserData userData;
@@ -23,18 +25,14 @@ class _MapState extends State<Map> {
     _markers.forEach((marker) {});
   }
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
-
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
   @override
   Widget build(BuildContext context) {
+    // Get location data from stream
+    var userLocation = Provider.of<UserLocation>(context);
+    final CameraPosition _startPos = CameraPosition(
+        target: LatLng(userLocation.latitude, userLocation.longitude),
+        zoom: 15.0);
+    // Create a future list for locations
     Future<List<CourierLocation>> _locations;
     switch (widget.userData.role) {
       case 'customer':
@@ -102,7 +100,7 @@ class _MapState extends State<Map> {
             return Scaffold(
               body: GoogleMap(
                 mapType: MapType.hybrid,
-                initialCameraPosition: _kGooglePlex,
+                initialCameraPosition: _startPos,
                 onMapCreated: (GoogleMapController controller) {
                   _controller.complete(controller);
                 },
