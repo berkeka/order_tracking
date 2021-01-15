@@ -195,4 +195,8 @@ class DatabaseService {
     });
     return _deliveryLocations;
   }
+
+  Future<Stream> getLocationChange() async {
+    return courierLocationCollection.snapshots();
+  }
 }

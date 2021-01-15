@@ -21,10 +21,6 @@ class _MapState extends State<Map> {
 
   Set<Marker> _markers = Set<Marker>();
 
-  void updateMarkers(/* changed values */) {
-    _markers.forEach((marker) {});
-  }
-
   @override
   Widget build(BuildContext context) {
     // Get location data from stream
@@ -34,6 +30,7 @@ class _MapState extends State<Map> {
         zoom: 15.0);
     // Create a future list for locations
     Future<List<CourierLocation>> _locations;
+    Future<Stream> _locStream;
     switch (widget.userData.role) {
       case 'customer':
         // Customer will see only the couriers that will deliver them their orders
@@ -47,23 +44,40 @@ class _MapState extends State<Map> {
         break;
       default:
         // Admin will see all of the couriers on the map
+        _locStream = _databaseService.getLocationChange();
         _locations = _databaseService.getCourierLocations();
     }
     return Scaffold(
       backgroundColor: backgroundColor[50],
       body: Container(
-        child: FutureBuilder<List<CourierLocation>>(
-          future: _locations,
-          builder: (BuildContext context,
-              AsyncSnapshot<List<CourierLocation>> snapshot) {
+        child: FutureBuilder<List<dynamic>>(
+          future: Future.wait([_locations, _locStream]),
+          builder:
+              (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
             List<Widget> children;
             if (snapshot.hasData) {
-              snapshot.data.forEach((locData) {
+              snapshot.data[0].forEach((locData) {
                 _markers.add(Marker(
                   markerId: MarkerId(locData.uid),
                   position: LatLng(
                       locData.location.latitude, locData.location.longitude),
                 ));
+              });
+              snapshot.data[1].listen((QuerySnapshot value) {
+                value.documentChanges.forEach((documentChange) {
+                  DocumentSnapshot document = documentChange.document;
+                  // If marker for this courier exists
+                  // Update or create marker data
+                  if (document != null) {
+                    _markers.add(
+                      Marker(
+                        markerId: MarkerId(document.documentID),
+                        position: LatLng(document.data['location'].latitude,
+                            document.data['location'].longitude),
+                      ),
+                    );
+                  }
+                });
               });
             } else if (snapshot.hasError) {
               children = <Widget>[
