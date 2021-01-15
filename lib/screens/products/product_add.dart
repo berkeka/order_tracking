@@ -25,7 +25,7 @@ class _ProductAddState extends State<ProductAdd> {
     );
 
     setState(() {
-      _image = image as File;
+      _image = File(image.path);
     });
   }
 
@@ -35,7 +35,7 @@ class _ProductAddState extends State<ProductAdd> {
     );
 
     setState(() {
-      _image = image as File;
+      _image = File(image.path);      
     });
   }
 
@@ -167,6 +167,7 @@ class _ProductAddState extends State<ProductAdd> {
                   ),
                   onPressed: () async {
                     if (_formKey.currentState.validate()) {
+                      await _databaseService.uploadImageToFirebase(_image).then((value) => print(value));
                       Product newProduct =
                           Product(name: name, description: description, price: double.parse(price));
                       _databaseService.createProductData(newProduct);

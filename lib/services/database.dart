@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:order_tracking/models/product.dart';
 import 'package:order_tracking/models/user.dart';
 import 'package:order_tracking/models/order.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' ;
+import 'package:path/path.dart';
 
 class DatabaseService {
   final String uid;
@@ -114,5 +118,19 @@ class DatabaseService {
       });
     });
     return productList;
+  }
+  
+
+  Future<String> uploadImageToFirebase(File file) async {
+    String val;
+    String fileName = basename(file.path);
+    StorageReference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child('uploads/$fileName');
+    StorageUploadTask uploadTask = firebaseStorageRef.putFile(file);
+    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+    taskSnapshot.ref.getDownloadURL().then(
+          (value) => val = value,
+        );
+        return val;
   }
 }
