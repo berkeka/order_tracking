@@ -102,6 +102,9 @@ class _SignUpState extends State<SignUp> {
                             lastname: lastname,
                             role: 'customer');
                         ds.updateUserData(userData);
+                        if (userData.role == 'courier') {
+                          ds.createCourierLocation(userData.uid);
+                        }
                       }
                     }
                   }),
