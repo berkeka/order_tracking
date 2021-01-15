@@ -202,16 +202,13 @@ class DatabaseService {
     return _deliveryLocations;
   }
   
-  Future<String> uploadImageToFirebase(File file) async {
-  String val;
-  String fileName = basename(file.path);
-  StorageReference firebaseStorageRef =
-      FirebaseStorage.instance.ref().child('uploads/$fileName');
-  StorageUploadTask uploadTask = firebaseStorageRef.putFile(file);
-  StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
-  taskSnapshot.ref.getDownloadURL().then(
-        (value) => val = value,
-      );
-      return val;
+  Future<String> uploadImageToFirebase(var imageFile) async {
+    StorageReference ref = FirebaseStorage.instance.ref().child("/photo.jpg");
+    StorageUploadTask uploadTask = ref.putFile(imageFile);
+
+    var dowurl = await (await uploadTask.onComplete).ref.getDownloadURL();
+    String url = dowurl.toString();
+
+    return url; 
   }
 }
