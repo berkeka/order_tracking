@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:order_tracking/models/product.dart';
 import 'package:order_tracking/models/user.dart';
 import 'package:order_tracking/models/order.dart';
@@ -72,6 +73,7 @@ class DatabaseService {
       'name': product.name,
       'description': product.description,
       'price': product.price.toString(),
+      'imageURL': product.imageURL,
     });
   }
 
@@ -201,9 +203,10 @@ class DatabaseService {
     });
     return _deliveryLocations;
   }
-  
+
   Future<String> uploadImageToFirebase(var imageFile) async {
-    StorageReference ref = FirebaseStorage.instance.ref().child("/photo.jpg");
+    String fileName = basename(imageFile.path);
+    StorageReference ref = FirebaseStorage.instance.ref().child("uploads/$fileName");
     StorageUploadTask uploadTask = ref.putFile(imageFile);
 
     var dowurl = await (await uploadTask.onComplete).ref.getDownloadURL();
