@@ -78,12 +78,17 @@ class _CartViewState extends State<CartView> {
                       style: TextStyle(color: Colors.white),
                     ),
                     onPressed: () async {
+                      if(c.Cart.cartItems.isNotEmpty){
                       LocationData _locationData = await location.getLocation();
                       _databaseService.createOrder(
                           latestCartItems,
                           user.uid,
                           GeoPoint(
                               _locationData.latitude, _locationData.longitude));
+                          latestCartItems.clear();
+                          c.Cart.cartItems.clear();
+                          Navigator.of(context).pop();
+                    }
                     }),
               ),
             ),
