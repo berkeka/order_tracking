@@ -4,6 +4,7 @@ import 'package:order_tracking/screens/couriers/couriers.dart';
 import 'package:order_tracking/screens/orders/orders.dart';
 import 'package:order_tracking/shared/constants.dart';
 import 'package:order_tracking/screens/charts/pie_chart.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeContent extends StatefulWidget {
   final UserData userData;
@@ -15,13 +16,14 @@ class HomeContent extends StatefulWidget {
 class _HomeContentState extends State<HomeContent> {
   @override
   Widget build(BuildContext context) {
+    final _localizations = AppLocalizations.of(context);
     List<Widget> children = List<Widget>();
     if (widget.userData.role == 'admin') {
       children = [
         Padding(
           padding: EdgeInsets.only(left: 10.0),
           child: ElevatedButton(
-            child: Text('Couriers'),
+            child: Text(_localizations.couriers),
             onPressed: () {
               Navigator.push(
                 context,
@@ -36,7 +38,7 @@ class _HomeContentState extends State<HomeContent> {
         Padding(
           padding: EdgeInsets.only(left: 10.0),
           child: ElevatedButton(
-            child: Text('Orders'),
+            child: Text(_localizations.orders),
             onPressed: () {
               Navigator.push(
                 context,

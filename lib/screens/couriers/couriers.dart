@@ -5,6 +5,7 @@ import 'package:order_tracking/shared/constants.dart';
 import 'package:order_tracking/services/database.dart';
 import 'courier_add.dart';
 import 'dart:async';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Couriers extends StatefulWidget {
   final UserData userData;
@@ -17,16 +18,17 @@ class _CouriersState extends State<Couriers> {
   DatabaseService _databaseService = DatabaseService();
   @override
   Widget build(BuildContext context) {
+    final _localizations = AppLocalizations.of(context);
     Future<List<UserData>> _courierList = _databaseService.getCouriers();
     UserData selectedCourierData;
     Widget cancelButton = FlatButton(
-      child: Text("Cancel"),
+      child: Text(_localizations.cancel),
       onPressed: () {
         Navigator.of(context).pop();
       },
     );
     Widget continueButton = FlatButton(
-      child: Text("Continue"),
+      child: Text(_localizations.continueMessage),
       onPressed: () {
         selectedCourierData.role = 'customer';
         _databaseService.updateUserData(selectedCourierData);
@@ -34,8 +36,8 @@ class _CouriersState extends State<Couriers> {
       },
     );
     AlertDialog alert = AlertDialog(
-      title: Text("Warning"),
-      content: Text("Do you want to delete this courier?"),
+      title: Text(_localizations.warning),
+      content: Text(_localizations.deleteCourierQuestion),
       actions: [
         cancelButton,
         continueButton,
@@ -110,9 +112,9 @@ class _CouriersState extends State<Couriers> {
                   width: 60,
                   height: 60,
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(top: 16),
-                  child: Text('Awaiting product data...'),
+                  child: Text(_localizations.awaitingCourierData),
                 )
               ];
               return Center(

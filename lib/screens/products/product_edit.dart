@@ -5,6 +5,7 @@ import 'package:order_tracking/models/product.dart';
 import 'package:order_tracking/shared/constants.dart';
 import 'package:order_tracking/services/database.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProductEdit extends StatefulWidget {
   final Product product;
@@ -98,6 +99,7 @@ class _ProductEditState extends State<ProductEdit> {
 
   @override
   Widget build(BuildContext context) {
+    final _localizations = AppLocalizations.of(context);
     Product product = widget.product;
     name = product.name;
     price = product.price.toString();
@@ -118,18 +120,18 @@ class _ProductEditState extends State<ProductEdit> {
           child: Column(
             children: <Widget>[
               SizedBox(height: 10.0),
-              Text('Name'),
+              Text(_localizations.name),
               TextFormField(
                 //initialValue: name,
                 controller: nameController,
               ),
               SizedBox(height: 10.0),
-              Text('Price'),
+              Text(_localizations.price),
               TextFormField(
                 controller: priceController,
               ),
               SizedBox(height: 10.0),
-              Text('Description'),
+              Text(_localizations.description),
               TextFormField(
                 controller: descriptionController,
               ),
@@ -187,7 +189,7 @@ class _ProductEditState extends State<ProductEdit> {
               RaisedButton(
                   color: backgroundColor[400],
                   child: Text(
-                    'Complete',
+                    _localizations.complete,
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () {
@@ -202,7 +204,7 @@ class _ProductEditState extends State<ProductEdit> {
                       _databaseService.updateProductData(newProduct);
                       Navigator.of(context).pop();
                     } else {
-                      error = "You must fill in the text boxes.";
+                      error = _localizations.productEditError;
                     }
                   }),
               SizedBox(height: 12.0),
