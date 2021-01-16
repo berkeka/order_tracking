@@ -135,7 +135,7 @@ class DatabaseService {
       snapshot.documents.forEach((doc) {
         double price = double.parse(doc.data['price']);
         productList.add(Product(
-            name: doc.data['name'], description: doc.data['description'], price: price, productid: doc.documentID));
+            name: doc.data['name'], description: doc.data['description'], price: price, imageURL: doc.data['imageURL'], productid: doc.documentID));
       });
     });
     return productList;
