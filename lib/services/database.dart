@@ -109,6 +109,23 @@ class DatabaseService {
     return courierList;
   }
 
+  Future<List<UserData>> getCustomers() async {
+    List<UserData> customerList = List<UserData>();
+    await userCollection
+        .where('role', isEqualTo: 'customer')
+        .getDocuments()
+        .then((snapshot) {
+      snapshot.documents.forEach((user) {
+        customerList.add(UserData(
+            uid: user.documentID,
+            name: user.data['name'],
+            lastname: user.data['lastname'],
+            role: user.data['role']));
+      });
+    });
+    return customerList;
+  }
+
   Future<List<Order>> getOrders() async {
     List<Order> orderList = List<Order>();
     await orderCollection

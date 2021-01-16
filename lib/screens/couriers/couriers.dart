@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:order_tracking/models/user.dart';
+import 'package:order_tracking/screens/products/product_add.dart';
 import 'package:order_tracking/shared/constants.dart';
 import 'package:order_tracking/services/database.dart';
+import 'courier_add.dart';
+import 'dart:async';
 
 class Couriers extends StatefulWidget {
   final UserData userData;
@@ -50,30 +53,41 @@ class _CouriersState extends State<Couriers> {
           future: _courierList,
           builder:
               (BuildContext context, AsyncSnapshot<List<UserData>> snapshot) {
-            List<Widget> children;
+            List<Widget> children = <Widget>[];
+            List<Widget> finalChildren = [
+              ListView(
+                children: children,
+              ),
+            ];
             if (snapshot.hasData) {
-              children = <Widget>[];
               List<UserData> courierList = snapshot.data;
-              courierList.forEach((user) {
+              courierList.forEach((courier) {
+                List<Widget> buttonChildren = [];
+                if (widget.userData.role == 'admin') {
+                  buttonChildren.add(
+                    IconButton(
+                      icon: Icon(
+                        Icons.remove_circle_outline,
+                        color: Colors.red[400],
+                      ),
+                      onPressed: () {
+                        selectedCourierData = courier;
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return alert;
+                          },
+                        ).then(onGoBack);
+                      },
+                    ),
+                  );                                    
+                }                
                 children.add(Card(
                     child: ListTile(
-                  title: Text("${user.name} ${user.lastname}"),
+                  title: Text("${courier.name} ${courier.lastname}"),
                   tileColor: backgroundColor[25],
                   trailing: Wrap(
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.remove_circle_outline),
-                        onPressed: () {
-                          selectedCourierData = user;
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return alert;
-                            },
-                          );
-                        },
-                      ),
-                    ],
+                    children: buttonChildren,
                   ),
                 )));
               });
@@ -98,7 +112,7 @@ class _CouriersState extends State<Couriers> {
                 ),
                 const Padding(
                   padding: EdgeInsets.only(top: 16),
-                  child: Text('Awaiting courier data...'),
+                  child: Text('Awaiting product data...'),
                 )
               ];
               return Center(
@@ -109,14 +123,50 @@ class _CouriersState extends State<Couriers> {
                 ),
               );
             }
+            if (widget.userData.role == 'admin') {
+              finalChildren.add(
+                    Positioned(
+                      left: 10.0,
+                      bottom: 10.0,
+                      child: Container(
+                        width: 75.0,
+                        height: 75.0,
+                        child: IconButton(
+                            padding: const EdgeInsets.all(0),
+                            icon: Icon(
+                              Icons.add_box,
+                              color: backgroundColor[400],
+                              size: 70,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        // Add courier page
+                                        CourierAdd()),
+                              ).then(onGoBack);
+                            }),
+                      ),
+                    ),
+                  );
+            }
             return Center(
-              child: ListView(
-                children: children,
+              child: Stack(
+                children: finalChildren,
               ),
             );
           },
         ),
       ),
     );
+  }
+
+  /*
+
+*/
+  // Refresh page on fallback
+  FutureOr onGoBack(dynamic value) {
+    setState(() {});
   }
 }
