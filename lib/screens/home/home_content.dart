@@ -17,8 +17,10 @@ class _HomeContentState extends State<HomeContent> {
   @override
   Widget build(BuildContext context) {
     final _localizations = AppLocalizations.of(context);
+    Widget chart;
     List<Widget> children = List<Widget>();
     if (widget.userData.role == 'admin') {
+      chart = BestSellingChart();
       children = [
         Padding(
           padding: EdgeInsets.only(left: 10.0),
@@ -52,14 +54,15 @@ class _HomeContentState extends State<HomeContent> {
         ),
       ];
     } else if (widget.userData.role == 'courier') {
-    } else {}
+      chart = Text("");
+    } else {chart = Text("");}
     return Scaffold(
       backgroundColor: backgroundColor[50],
       body: Column(children: [
         Row(
           children: children,
           ),
-      BestSellingChart()
+        chart
       ],
       ),
     );
