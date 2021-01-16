@@ -5,7 +5,7 @@ import 'package:order_tracking/models/product.dart';
 import 'package:order_tracking/models/user.dart';
 import 'package:order_tracking/models/order.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart' ;
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 
 class DatabaseService {
@@ -47,7 +47,7 @@ class DatabaseService {
     //print(product.name + " " + product.price.toString());
     return await productCollection.document(product.productid).setData({
       'name': product.name,
-      'description' : product.description,
+      'description': product.description,
       'price': product.price.toString(),
     });
   }
@@ -152,7 +152,11 @@ class DatabaseService {
       snapshot.documents.forEach((doc) {
         double price = double.parse(doc.data['price']);
         productList.add(Product(
-            name: doc.data['name'], description: doc.data['description'], price: price, imageURL: doc.data['imageURL'], productid: doc.documentID));
+            name: doc.data['name'],
+            description: doc.data['description'],
+            price: price,
+            imageURL: doc.data['imageURL'],
+            productid: doc.documentID));
       });
     });
     return productList;
@@ -174,7 +178,7 @@ class DatabaseService {
 
   Future<List<CourierLocation>> getCouriersForCustomer(
       String customerid) async {
-    List<int> _courierIDs = List<int>();
+    List<String> _courierIDs = List<String>();
     List<CourierLocation> _courierLocations = List<CourierLocation>();
     // Get courier ids for every order which are related to our customer and not delivered
     await orderCollection.getDocuments().then((snapshot) {
@@ -221,19 +225,19 @@ class DatabaseService {
     return _deliveryLocations;
   }
 
-
   Future<Stream> getLocationChange() async {
     return courierLocationCollection.snapshots();
   }
 
   Future<String> uploadImageToFirebase(var imageFile) async {
     String fileName = basename(imageFile.path);
-    StorageReference ref = FirebaseStorage.instance.ref().child("uploads/$fileName");
+    StorageReference ref =
+        FirebaseStorage.instance.ref().child("uploads/$fileName");
     StorageUploadTask uploadTask = ref.putFile(imageFile);
 
     var dowurl = await (await uploadTask.onComplete).ref.getDownloadURL();
     String url = dowurl.toString();
 
-    return url; 
+    return url;
   }
 }
