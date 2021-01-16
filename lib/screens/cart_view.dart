@@ -12,18 +12,17 @@ class _CartViewState extends State<CartView> {
   @override
   Widget build(BuildContext context) {
     List<Widget> children = <Widget>[];
-    c.Cart.cartItems.forEach((item) {
-      Product product = item.keys.first;
-      int amount = item.values.first;
-      children.add(
+      c.Cart.cartItems.forEach((key, value) {children.add(
         Card(
           child: ListTile(
-            title: Text(product.name),
-            subtitle: Text(amount.toString()),
+            title: Text(value.product.name),
+            subtitle: Text(value.amount.toString()),
           ),
         ),
       );
-    });
+      }
+      );    
+    
     return Scaffold(
       appBar: AppBar(
         title: Text(projectName),

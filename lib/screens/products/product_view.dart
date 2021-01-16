@@ -20,7 +20,7 @@ class ProductView extends StatefulWidget {
 class _ProductViewState extends State<ProductView> {
   DatabaseService _databaseService = DatabaseService();
 
-  int _n = 0;
+  int _n = 1;
 
   @override
   void add() {
@@ -32,7 +32,7 @@ class _ProductViewState extends State<ProductView> {
   @override
   void minus() {
     setState(() {
-      if (_n != 0) _n--;
+      if (_n != 1) _n--;
     });
   }
 
@@ -48,28 +48,21 @@ class _ProductViewState extends State<ProductView> {
         ),
         body: Column(
           children: [
-            Align(
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+              child: Align(
                 alignment: Alignment.center,
                 child: Text(
                   product.name,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 25.0,
-                      color: Colors.orange[500]),
-                )),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                    child: Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                        child: Text(
-                          product.description,
-                          style: TextStyle(fontSize: 14),
-                        ))),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      color: Colors.black),
+                )
+            ),
+            ),
+            Container(
+                  padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(8.0),
@@ -81,9 +74,15 @@ class _ProductViewState extends State<ProductView> {
                         height: 150,
                         fit: BoxFit.fill),
                   ),
-                )
-              ],
             ),
+            Expanded(
+                    child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+                        child: Text(
+                          product.description,
+                          style: TextStyle(fontSize: 14),
+                        ))),            
             Container(
               padding: EdgeInsets.only(top: 40),
               child: Center(
@@ -93,14 +92,14 @@ class _ProductViewState extends State<ProductView> {
                     FloatingActionButton(
                       heroTag: "btn1",
                       onPressed: minus,
-                      child: Icon(Icons.remove, color: Colors.black),
+                      child: Icon(Icons.remove, color: Colors.black, size: 20.0,),
                       backgroundColor: Colors.white,
                     ),
-                    Text('$_n', style: TextStyle(fontSize: 60.0)),
+                    Text('$_n', style: TextStyle(fontSize: 30.0)),
                     FloatingActionButton(
                       heroTag: "btn2",
                       onPressed: add,
-                      child: Icon(Icons.add, color: Colors.black),
+                      child: Icon(Icons.add, color: Colors.black, size: 20.0,),
                       backgroundColor: Colors.white,
                     ),
                   ],
@@ -108,7 +107,7 @@ class _ProductViewState extends State<ProductView> {
               ),
             ),
             Container(
-                padding: EdgeInsets.only(top: 20),
+                padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
                 child: Center(
                     child: RaisedButton(
                   child: Text(
@@ -116,9 +115,14 @@ class _ProductViewState extends State<ProductView> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () {
-                    c.Cart.cartItems.add({product: 2});
+                    if(c.Cart.cartItems.containsKey(product.productid)){
+                      c.Cart.cartItems[product.productid].amount += _n;
+                    }
+                    else{
+                      c.Cart.cartItems[product.productid] = c.CartData(product: product, amount: _n);
+                    }
                   },
-                  color: Colors.red,
+                  color: Colors.blue,
                 )))
           ],
         ));
