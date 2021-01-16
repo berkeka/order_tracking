@@ -30,6 +30,22 @@ class _CartViewState extends State<CartView> {
           child: ListTile(
             title: Text(value.product.name),
             subtitle: Text(value.amount.toString()),
+            trailing: IconButton(
+              icon: Icon(
+                Icons.remove_circle,
+                color: Colors.red[400],
+              ),
+              onPressed: () => {
+                latestCartItems.asMap().forEach((index, value) => {
+                      if (value.keys.first == key)
+                        {
+                          latestCartItems[index] = {},
+                          c.Cart.cartItems.remove(key),
+                          setState(() {}),
+                        }
+                    }),
+              },
+            ),
           ),
         ),
       );
