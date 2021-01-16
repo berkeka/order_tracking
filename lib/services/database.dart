@@ -1,7 +1,12 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:order_tracking/models/product.dart';
 import 'package:order_tracking/models/user.dart';
 import 'package:order_tracking/models/order.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' ;
+import 'package:path/path.dart';
 
 class DatabaseService {
   final String uid;
@@ -42,6 +47,7 @@ class DatabaseService {
     //print(product.name + " " + product.price.toString());
     return await productCollection.document(product.productid).setData({
       'name': product.name,
+      'description' : product.description,
       'price': product.price.toString(),
     });
   }
@@ -65,7 +71,9 @@ class DatabaseService {
   Future createProductData(Product product) async {
     return await productCollection.document().setData({
       'name': product.name,
+      'description': product.description,
       'price': product.price.toString(),
+      'imageURL': product.imageURL,
     });
   }
 
@@ -127,7 +135,7 @@ class DatabaseService {
       snapshot.documents.forEach((doc) {
         double price = double.parse(doc.data['price']);
         productList.add(Product(
-            name: doc.data['name'], price: price, productid: doc.documentID));
+            name: doc.data['name'], description: doc.data['description'], price: price, imageURL: doc.data['imageURL'], productid: doc.documentID));
       });
     });
     return productList;
@@ -196,7 +204,19 @@ class DatabaseService {
     return _deliveryLocations;
   }
 
+
   Future<Stream> getLocationChange() async {
     return courierLocationCollection.snapshots();
+  }
+
+  Future<String> uploadImageToFirebase(var imageFile) async {
+    String fileName = basename(imageFile.path);
+    StorageReference ref = FirebaseStorage.instance.ref().child("uploads/$fileName");
+    StorageUploadTask uploadTask = ref.putFile(imageFile);
+
+    var dowurl = await (await uploadTask.onComplete).ref.getDownloadURL();
+    String url = dowurl.toString();
+
+    return url; 
   }
 }
