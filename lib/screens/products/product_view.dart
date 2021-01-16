@@ -4,6 +4,7 @@ import 'package:order_tracking/models/user.dart';
 import 'package:order_tracking/shared/constants.dart';
 import 'package:order_tracking/services/database.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ProductView extends StatefulWidget {
   final Product product;
@@ -58,10 +59,18 @@ class _ProductViewState extends State<ProductView> {
             ),
             Container(
               padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              child: Icon(
-                Icons.food_bank, size: 150.0
-                //product.png
-              ),
+              child : ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8.0),
+                      topRight: Radius.circular(8.0),
+                    ),
+                    child: Image.network(
+                        '${product.imageURL}', //doesn't work, will be fixed
+                        // width: 300,
+                        height: 150,
+                        fit:BoxFit.fill
+                    ),
+                  ),
             )
           ],
         ),

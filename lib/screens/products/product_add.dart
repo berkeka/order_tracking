@@ -167,9 +167,10 @@ class _ProductAddState extends State<ProductAdd> {
                   ),
                   onPressed: () async {
                     if (_formKey.currentState.validate()) {
-                      await _databaseService.uploadImageToFirebase(_image).then((value) => print(value));
+                      String url;
+                      await _databaseService.uploadImageToFirebase(_image).then((value) => url = value);
                       Product newProduct =
-                          Product(name: name, description: description, price: double.parse(price));
+                          Product(name: name, description: description, price: double.parse(price), imageURL: url);
                       _databaseService.createProductData(newProduct);
                       Navigator.of(context).pop();
                     }
