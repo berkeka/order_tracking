@@ -204,6 +204,11 @@ class DatabaseService {
     return _deliveryLocations;
   }
 
+
+  Future<Stream> getLocationChange() async {
+    return courierLocationCollection.snapshots();
+  }
+
   Future<String> uploadImageToFirebase(var imageFile) async {
     String fileName = basename(imageFile.path);
     StorageReference ref = FirebaseStorage.instance.ref().child("uploads/$fileName");
