@@ -115,7 +115,12 @@ class _ProductViewState extends State<ProductView> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () {
-                    c.Cart.cartItems.add({product: _n});
+                    if(c.Cart.cartItems.containsKey(product.productid)){
+                      c.Cart.cartItems[product.productid].amount += _n;
+                    }
+                    else{
+                      c.Cart.cartItems[product.productid] = c.CartData(product: product, amount: _n);
+                    }
                   },
                   color: Colors.blue,
                 )))
