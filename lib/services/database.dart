@@ -77,6 +77,18 @@ class DatabaseService {
     });
   }
 
+  Future createOrder(List<Map<String, int>> products, String customerID,
+      GeoPoint customerLocation) async {
+    await orderCollection.document().setData({
+      'courierid': "",
+      'customerid': customerID,
+      'isdelivered': false,
+      'deliverylocation': customerLocation,
+      'orderdate': Timestamp.fromDate(DateTime.now()),
+      'products': products
+    });
+  }
+
   Future deleteProduct(String productid) async {
     await productCollection.document(productid).delete();
   }
