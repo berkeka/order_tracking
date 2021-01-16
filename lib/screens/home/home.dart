@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:order_tracking/models/user.dart';
+import 'package:order_tracking/screens/cart_view.dart';
 import 'package:order_tracking/screens/home/home_content.dart';
 import 'package:order_tracking/screens/map.dart';
 import 'package:order_tracking/screens/products/products.dart';
@@ -9,7 +12,6 @@ import 'package:order_tracking/services/database.dart';
 import 'package:order_tracking/services/location_service.dart';
 import 'package:provider/provider.dart';
 import 'package:order_tracking/shared/constants.dart';
-import 'package:location/location.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Home extends StatefulWidget {
@@ -85,8 +87,13 @@ class _HomeState extends State<Home> {
                     IconButton(
                       icon: Icon(Icons.shopping_cart),
                       color: Colors.black,
-                      onPressed: () {
-                        // Navigate to cart page
+                      onPressed: (
+                          // Navigate to cart page
+                          ) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => CartView()),
+                        );
                       },
                     ),
                   );

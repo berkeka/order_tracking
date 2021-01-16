@@ -131,8 +131,10 @@ class _ProductsState extends State<Products> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  ProductView(product: product)),
+                            builder: (context) => ProductView(
+                              product: product,
+                            ),
+                          ),
                         ).then(onGoBack);
                       },
                     ),

@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:order_tracking/models/product.dart';
 import 'package:order_tracking/models/user.dart';
+import 'package:order_tracking/models/cart.dart' as c;
 import 'package:order_tracking/shared/constants.dart';
 import 'package:order_tracking/services/database.dart';
 import 'package:provider/provider.dart';
@@ -112,7 +115,9 @@ class _ProductViewState extends State<ProductView> {
                     _localizations.addToCart,
                     style: TextStyle(color: Colors.white),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    c.Cart.cartItems.add({product: 2});
+                  },
                   color: Colors.red,
                 )))
           ],
