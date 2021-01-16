@@ -8,6 +8,7 @@ import 'package:order_tracking/screens/products/product_edit.dart';
 import 'package:order_tracking/shared/constants.dart';
 import 'package:order_tracking/services/database.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Products extends StatefulWidget {
   final UserData userData;
@@ -21,25 +22,26 @@ class _ProductsState extends State<Products> {
   DatabaseService _databaseService = DatabaseService();
   @override
   Widget build(BuildContext context) {
+    final _localizations = AppLocalizations.of(context);
     User user = Provider.of<User>(context);
     Future<List<Product>> _productList = _databaseService.getProducts();
     String selectedProductId;
     Widget cancelButton = FlatButton(
-      child: Text("Cancel"),
+      child: Text(_localizations.cancel),
       onPressed: () {
         Navigator.of(context).pop();
       },
     );
     Widget continueButton = FlatButton(
-      child: Text("Continue"),
+      child: Text(_localizations.continueMessage),
       onPressed: () {
         _databaseService.deleteProduct(selectedProductId);
         Navigator.of(context).pop();
       },
     );
     AlertDialog alert = AlertDialog(
-      title: Text("Warning"),
-      content: Text("Do you want to delete this product?"),
+      title: Text(_localizations.warning),
+      content: Text(_localizations.deleteProductQuestion),
       actions: [
         cancelButton,
         continueButton,
@@ -121,20 +123,20 @@ class _ProductsState extends State<Products> {
                     ),
                   );
                 }
-                if(widget.userData.role == "customer") {
+                if (widget.userData.role == "customer") {
                   buttonChildren.add(
-                  IconButton(
-                    icon: Icon(Icons.info_outline),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                ProductView(product: product)),
-                      ).then(onGoBack);
-                    },
-                  ),
-                );
+                    IconButton(
+                      icon: Icon(Icons.info_outline),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ProductView(product: product)),
+                        ).then(onGoBack);
+                      },
+                    ),
+                  );
                 }
                 children.add(Card(
                     child: ListTile(
@@ -165,9 +167,9 @@ class _ProductsState extends State<Products> {
                   width: 60,
                   height: 60,
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(top: 16),
-                  child: Text('Awaiting product data...'),
+                  child: Text(_localizations.awaitingProductData),
                 )
               ];
               return Center(
@@ -177,33 +179,6 @@ class _ProductsState extends State<Products> {
                   children: children,
                 ),
               );
-            }
-            if (widget.userData.role == 'admin') {
-              /*
-              children.add(
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    IconButton(
-                        icon: Icon(
-                          Icons.add,
-                          color: backgroundColor[400],
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    // Product edit page
-                                    ProductAdd()),
-                          ).then(onGoBack);
-                        })
-                  ],
-                ),
-              );
-              */
             }
             return Center(
               child: Stack(
@@ -216,9 +191,6 @@ class _ProductsState extends State<Products> {
     );
   }
 
-  /*
-
-*/
   // Refresh page on fallback
   FutureOr onGoBack(dynamic value) {
     setState(() {});

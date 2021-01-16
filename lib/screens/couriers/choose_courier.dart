@@ -3,6 +3,7 @@ import 'package:order_tracking/models/order.dart';
 import 'package:order_tracking/models/user.dart';
 import 'package:order_tracking/shared/constants.dart';
 import 'package:order_tracking/services/database.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChooseCourier extends StatefulWidget {
   final Order order;
@@ -15,16 +16,17 @@ class _ChooseCourierState extends State<ChooseCourier> {
   DatabaseService _databaseService = DatabaseService();
   @override
   Widget build(BuildContext context) {
+    final _localizations = AppLocalizations.of(context);
     Future<List<UserData>> _courierList = _databaseService.getCouriers();
     String selectedCourierID;
     Widget cancelButton = FlatButton(
-      child: Text("Cancel"),
+      child: Text(_localizations.cancel),
       onPressed: () {
         Navigator.of(context).pop();
       },
     );
     Widget continueButton = FlatButton(
-      child: Text("Continue"),
+      child: Text(_localizations.continueMessage),
       onPressed: () {
         Order newOrder = widget.order;
         newOrder.courierid = selectedCourierID;
@@ -34,8 +36,8 @@ class _ChooseCourierState extends State<ChooseCourier> {
       },
     );
     AlertDialog alert = AlertDialog(
-      title: Text("Warning"),
-      content: Text("Do you want to select this courier?"),
+      title: Text(_localizations.warning),
+      content: Text(_localizations.selectCourierQuestion),
       actions: [
         cancelButton,
         continueButton,
@@ -99,10 +101,9 @@ class _ChooseCourierState extends State<ChooseCourier> {
                   width: 60,
                   height: 60,
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 16),
-                  child: Text('Awaiting courier data...'),
-                )
+                Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: Text(_localizations.awaitingCourierData))
               ];
               return Center(
                 child: Column(

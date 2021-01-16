@@ -22,6 +22,7 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
+    final _localizations = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: backgroundColor[50],
       appBar: AppBar(
@@ -31,7 +32,7 @@ class _SignInState extends State<SignIn> {
         actions: <Widget>[
           FlatButton.icon(
             icon: Icon(Icons.person),
-            label: Text('Sign Up'),
+            label: Text(_localizations.signUp),
             onPressed: () => widget.toggleView(),
           ),
         ],
@@ -44,7 +45,8 @@ class _SignInState extends State<SignIn> {
             children: <Widget>[
               SizedBox(height: 10.0),
               TextFormField(
-                validator: (val) => val.isEmpty ? 'Enter an email' : null,
+                validator: (val) =>
+                    val.isEmpty ? _localizations.enterEmail : null,
                 onChanged: (val) {
                   setState(() => email = val);
                 },
@@ -53,18 +55,19 @@ class _SignInState extends State<SignIn> {
               SizedBox(height: 10.0),
               TextFormField(
                 obscureText: true,
-                validator: (val) =>
-                    val.length < 6 ? 'Enter a password 6+ chars long' : null,
+                validator: (val) => val.length < 6
+                    ? _localizations.passwordLengthWarning
+                    : null,
                 onChanged: (val) {
                   setState(() => password = val);
                 },
-                decoration: InputDecoration(labelText: 'password'),
+                decoration: InputDecoration(labelText: _localizations.password),
               ),
               SizedBox(height: 10.0),
               RaisedButton(
                   color: backgroundColor[400],
                   child: Text(
-                    'Sign In',
+                    _localizations.signIn,
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
@@ -73,7 +76,7 @@ class _SignInState extends State<SignIn> {
                           email, password);
                       if (result == null) {
                         setState(() {
-                          error = 'Could not sign in with those credentials';
+                          error = _localizations.wrongCreds;
                         });
                       }
                     }

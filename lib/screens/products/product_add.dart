@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:order_tracking/models/product.dart';
 import 'package:order_tracking/shared/constants.dart';
 import 'package:order_tracking/services/database.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProductAdd extends StatefulWidget {
   @override
@@ -20,9 +21,8 @@ class _ProductAddState extends State<ProductAdd> {
   final _picker = ImagePicker();
 
   _imgFromCamera() async {
-    PickedFile image = await _picker.getImage(
-      source: ImageSource.camera, imageQuality: 50
-    );
+    PickedFile image =
+        await _picker.getImage(source: ImageSource.camera, imageQuality: 50);
 
     setState(() {
       _image = File(image.path);
@@ -30,16 +30,16 @@ class _ProductAddState extends State<ProductAdd> {
   }
 
   _imgFromGallery() async {
-    PickedFile image = await  _picker.getImage(
-        source: ImageSource.gallery, imageQuality: 50
-    );
+    PickedFile image =
+        await _picker.getImage(source: ImageSource.gallery, imageQuality: 50);
 
     setState(() {
-      _image = File(image.path);      
+      _image = File(image.path);
     });
   }
 
   void _showPicker(context) {
+    final _localizations = AppLocalizations.of(context);
     showModalBottomSheet(
         context: context,
         builder: (BuildContext bc) {
@@ -49,14 +49,14 @@ class _ProductAddState extends State<ProductAdd> {
                 children: <Widget>[
                   new ListTile(
                       leading: new Icon(Icons.photo_library),
-                      title: new Text('Photo Library'),
+                      title: new Text(_localizations.photoLibrary),
                       onTap: () {
                         _imgFromGallery();
                         Navigator.of(context).pop();
                       }),
                   new ListTile(
                     leading: new Icon(Icons.photo_camera),
-                    title: new Text('Camera'),
+                    title: new Text(_localizations.camera),
                     onTap: () {
                       _imgFromCamera();
                       Navigator.of(context).pop();
@@ -66,8 +66,7 @@ class _ProductAddState extends State<ProductAdd> {
               ),
             ),
           );
-        }
-      );
+        });
   }
   //For image picker
 
@@ -78,6 +77,7 @@ class _ProductAddState extends State<ProductAdd> {
 
   @override
   Widget build(BuildContext context) {
+    final _localizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(projectName),
@@ -91,28 +91,29 @@ class _ProductAddState extends State<ProductAdd> {
           child: Column(
             children: <Widget>[
               SizedBox(height: 10.0),
-              Text('Name'),
+              Text(_localizations.name),
               TextFormField(
                 validator: (val) =>
-                    (val.isEmpty) ? 'Enter a different name' : null,
+                    (val.isEmpty) ? _localizations.differentNameWarning : null,
                 onChanged: (val) {
                   setState(() => name = val);
                 },
               ),
               SizedBox(height: 10.0),
-              Text('Price'),
+              Text(_localizations.price),
               TextFormField(
                 validator: (val) =>
-                    val.isEmpty ? 'Enter a different price' : null,
+                    val.isEmpty ? _localizations.differentPriceWarning : null,
                 onChanged: (val) {
                   setState(() => price = val);
                 },
               ),
               SizedBox(height: 10.0),
-              Text('Description'),
+              Text(_localizations.description),
               TextFormField(
-                validator: (val) =>
-                    val.isEmpty ? 'Enter a different description' : null,
+                validator: (val) => val.isEmpty
+                    ? _localizations.differentDescriptionWarning
+                    : null,
                 onChanged: (val) {
                   setState(() => description = val);
                 },
@@ -162,15 +163,20 @@ class _ProductAddState extends State<ProductAdd> {
               RaisedButton(
                   color: backgroundColor[400],
                   child: Text(
-                    'Complete',
+                    _localizations.complete,
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
                     if (_formKey.currentState.validate()) {
                       String url;
-                      await _databaseService.uploadImageToFirebase(_image).then((value) => url = value);
-                      Product newProduct =
-                          Product(name: name, description: description, price: double.parse(price), imageURL: url);
+                      await _databaseService
+                          .uploadImageToFirebase(_image)
+                          .then((value) => url = value);
+                      Product newProduct = Product(
+                          name: name,
+                          description: description,
+                          price: double.parse(price),
+                          imageURL: url);
                       _databaseService.createProductData(newProduct);
                       Navigator.of(context).pop();
                     }
