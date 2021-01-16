@@ -6,6 +6,7 @@ import 'package:order_tracking/models/order.dart';
 import 'package:order_tracking/screens/couriers/choose_courier.dart';
 import 'package:order_tracking/shared/constants.dart';
 import 'package:order_tracking/services/database.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Orders extends StatefulWidget {
   final UserData userData;
@@ -18,6 +19,7 @@ class _OrdersState extends State<Orders> {
   DatabaseService _databaseService = DatabaseService();
   @override
   Widget build(BuildContext context) {
+    final _localizations = AppLocalizations.of(context);
     Future<List<Order>> _orderList = _databaseService.getOrders();
     return Scaffold(
       appBar: AppBar(
@@ -59,7 +61,9 @@ class _OrdersState extends State<Orders> {
                 children.add(Card(
                     child: ListTile(
                   title: Text(order.orderid),
-                  subtitle: Text("Order Date: " + order.orderdate.toString()),
+                  subtitle: Text(_localizations.orderDate +
+                      ": " +
+                      order.orderdate.toString()),
                   leading: Icon(
                     Icons.circle,
                     color: color,
@@ -88,9 +92,9 @@ class _OrdersState extends State<Orders> {
                   width: 60,
                   height: 60,
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(top: 16),
-                  child: Text('Awaiting order data...'),
+                  child: Text(_localizations.awaitingOrderData),
                 )
               ];
               return Center(

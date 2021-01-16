@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:order_tracking/models/user.dart';
+import 'package:order_tracking/screens/cart_view.dart';
 import 'package:order_tracking/screens/home/home_content.dart';
 import 'package:order_tracking/screens/map.dart';
 import 'package:order_tracking/screens/products/products.dart';
@@ -9,7 +12,7 @@ import 'package:order_tracking/services/database.dart';
 import 'package:order_tracking/services/location_service.dart';
 import 'package:provider/provider.dart';
 import 'package:order_tracking/shared/constants.dart';
-import 'package:location/location.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -32,6 +35,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final _localizations = AppLocalizations.of(context);
     //var userLocation = Provider.of<UserLocation>(context);
     // Get user
     User user = Provider.of<User>(context);
@@ -40,7 +44,7 @@ class _HomeState extends State<Home> {
     List<Widget> actions = <Widget>[
       FlatButton.icon(
         icon: Icon(Icons.person),
-        label: Text('Logout'),
+        label: Text(_localizations.signout),
         onPressed: () async {
           await _auth.signOut();
         },
@@ -83,8 +87,13 @@ class _HomeState extends State<Home> {
                     IconButton(
                       icon: Icon(Icons.shopping_cart),
                       color: Colors.black,
-                      onPressed: () {
-                        // Navigate to cart page
+                      onPressed: (
+                          // Navigate to cart page
+                          ) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => CartView()),
+                        );
                       },
                     ),
                   );
@@ -130,9 +139,9 @@ class _HomeState extends State<Home> {
                     width: 60,
                     height: 60,
                   ),
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.only(top: 16),
-                    child: Text('Awaiting user data...'),
+                    child: Text(_localizations.awaitingUserData),
                   )
                 ];
               }
@@ -147,11 +156,14 @@ class _HomeState extends State<Home> {
           ),
         ),
         bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Map'),
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_cart), label: 'Products'),
+                icon: Icon(Icons.home), label: _localizations.home),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.map), label: _localizations.map),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.shopping_cart),
+                label: _localizations.products),
           ],
           type: BottomNavigationBarType.fixed,
           currentIndex: _selectedIndex,

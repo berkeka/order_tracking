@@ -7,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:order_tracking/services/database.dart';
 import 'package:order_tracking/services/location_service.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Map extends StatefulWidget {
   final UserData userData;
@@ -23,6 +24,7 @@ class _MapState extends State<Map> {
 
   @override
   Widget build(BuildContext context) {
+    final _localizations = AppLocalizations.of(context);
     // Get location data from stream
     var userLocation = Provider.of<UserLocation>(context);
     final CameraPosition _startPos = CameraPosition(
@@ -98,9 +100,9 @@ class _MapState extends State<Map> {
                   width: 60,
                   height: 60,
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(top: 16),
-                  child: Text('Awaiting location data...'),
+                  child: Text(_localizations.awaitingLocationData),
                 )
               ];
               return Center(

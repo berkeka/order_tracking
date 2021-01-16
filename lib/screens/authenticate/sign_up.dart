@@ -3,6 +3,7 @@ import 'package:order_tracking/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:order_tracking/services/database.dart';
 import 'package:order_tracking/shared/constants.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignUp extends StatefulWidget {
   final Function toggleView;
@@ -25,6 +26,7 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
+    final _localizations = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: backgroundColor[50],
       appBar: AppBar(
@@ -34,7 +36,7 @@ class _SignUpState extends State<SignUp> {
         actions: <Widget>[
           FlatButton.icon(
             icon: Icon(Icons.person),
-            label: Text('Sign In'),
+            label: Text(_localizations.signIn),
             onPressed: () => widget.toggleView(),
           ),
         ],
@@ -47,7 +49,8 @@ class _SignUpState extends State<SignUp> {
             children: <Widget>[
               SizedBox(height: 10.0),
               TextFormField(
-                validator: (val) => val.isEmpty ? 'Enter an email' : null,
+                validator: (val) =>
+                    val.isEmpty ? _localizations.enterEmail : null,
                 onChanged: (val) {
                   setState(() => email = val);
                 },
@@ -55,35 +58,38 @@ class _SignUpState extends State<SignUp> {
               ),
               SizedBox(height: 10.0),
               TextFormField(
-                validator: (val) => val.isEmpty ? 'Enter your name' : null,
+                validator: (val) =>
+                    val.isEmpty ? _localizations.enterName : null,
                 onChanged: (val) {
                   setState(() => name = val);
                 },
-                decoration: InputDecoration(labelText: 'name'),
+                decoration: InputDecoration(labelText: _localizations.name),
               ),
               SizedBox(height: 10.0),
               TextFormField(
-                validator: (val) => val.isEmpty ? 'Enter your lastname' : null,
+                validator: (val) =>
+                    val.isEmpty ? _localizations.enterLastname : null,
                 onChanged: (val) {
                   setState(() => lastname = val);
                 },
-                decoration: InputDecoration(labelText: 'lastname'),
+                decoration: InputDecoration(labelText: _localizations.lastname),
               ),
               SizedBox(height: 10.0),
               TextFormField(
                 obscureText: true,
-                validator: (val) =>
-                    val.length < 6 ? 'Enter a password 6+ chars long' : null,
+                validator: (val) => val.length < 6
+                    ? _localizations.passwordLengthWarning
+                    : null,
                 onChanged: (val) {
                   setState(() => password = val);
                 },
-                decoration: InputDecoration(labelText: 'password'),
+                decoration: InputDecoration(labelText: _localizations.password),
               ),
               SizedBox(height: 10.0),
               RaisedButton(
                   color: backgroundColor[400],
                   child: Text(
-                    'Sign Up',
+                    _localizations.signUp,
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
@@ -92,7 +98,7 @@ class _SignUpState extends State<SignUp> {
                           email, password);
                       if (result == null) {
                         setState(() {
-                          error = 'Please supply a valid email';
+                          error = _localizations.validEmailWarning;
                         });
                       } else {
                         DatabaseService ds = DatabaseService();
