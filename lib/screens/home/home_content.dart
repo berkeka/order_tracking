@@ -3,6 +3,7 @@ import 'package:order_tracking/models/user.dart';
 import 'package:order_tracking/screens/couriers/couriers.dart';
 import 'package:order_tracking/screens/orders/orders.dart';
 import 'package:order_tracking/shared/constants.dart';
+import 'package:order_tracking/screens/charts/pie_chart.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeContent extends StatefulWidget {
@@ -54,10 +55,12 @@ class _HomeContentState extends State<HomeContent> {
     } else {}
     return Scaffold(
       backgroundColor: backgroundColor[50],
-      body: Container(
-        child: Row(
+      body: Column(children: [
+        Row(
           children: children,
-        ),
+          ),
+      BestSellingChart()
+      ],
       ),
     );
   }

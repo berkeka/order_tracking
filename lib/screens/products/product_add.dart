@@ -118,41 +118,50 @@ class _ProductAddState extends State<ProductAdd> {
                   setState(() => description = val);
                 },
               ),
+              Container(
+                padding: EdgeInsets.only(top: 40.0),
+                child: Text("Picture"),
+              ),
               SizedBox(height: 10.0),
               //For image picker
               Column(
                 children: <Widget>[
                   SizedBox(
-                    height: 32,
                   ),
                   Center(
                     child: GestureDetector(
                       onTap: () {
                         _showPicker(context);
                       },
-                      child: CircleAvatar(
-                        radius: 55,
-                        backgroundColor: Color(0xffFDCF09),
+                      child: Container(
                         child: _image != null
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(50),
-                                child: Image.file(
-                                  _image,
-                                  width: 100,
-                                  height: 100,
-                                  fit: BoxFit.fitHeight,
-                                ),
+                            ? Container(
+                                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                child : ClipRRect(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(8.0),
+                                        topRight: Radius.circular(8.0),
+                                      ),
+                                      child: Image.file(
+                                          _image,
+                                          // width: 300,
+                                          height: 150,
+                                          fit:BoxFit.fill
+                                      ),
+                                    ),
                               )
                             : Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.grey[200],
-                                    borderRadius: BorderRadius.circular(50)),
-                                width: 100,
-                                height: 100,
-                                child: Icon(
-                                  Icons.camera_alt,
-                                  color: Colors.grey[800],
-                                ),
+                                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                child : ClipRRect(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(8.0),
+                                        topRight: Radius.circular(8.0),
+                                      ),
+                                      child: Icon(
+                                          Icons.camera_alt,
+                                          color: Colors.grey[600],
+                                      ),
+                                    ),
                               ),
                       ),
                     ),

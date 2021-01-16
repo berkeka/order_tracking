@@ -96,32 +96,7 @@ class _ProductsState extends State<Products> {
                       },
                     ),
                   );
-                  finalChildren.add(
-                    Positioned(
-                      left: 10.0,
-                      bottom: 10.0,
-                      child: Container(
-                        width: 75.0,
-                        height: 75.0,
-                        child: IconButton(
-                            padding: const EdgeInsets.all(0),
-                            icon: Icon(
-                              Icons.add_box,
-                              color: backgroundColor[400],
-                              size: 70,
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        // Product edit page
-                                        ProductAdd()),
-                              ).then(onGoBack);
-                            }),
-                      ),
-                    ),
-                  );
+                  
                 }
                 if (widget.userData.role == "customer") {
                   buttonChildren.add(
@@ -181,6 +156,34 @@ class _ProductsState extends State<Products> {
                   children: children,
                 ),
               );
+            }
+            if (widget.userData.role == 'admin') {
+              finalChildren.add(
+                    Positioned(
+                      left: 10.0,
+                      bottom: 10.0,
+                      child: Container(
+                        width: 75.0,
+                        height: 75.0,
+                        child: IconButton(
+                            padding: const EdgeInsets.all(0),
+                            icon: Icon(
+                              Icons.add_box,
+                              color: backgroundColor[400],
+                              size: 70,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        // Product edit page
+                                        ProductAdd()),
+                              ).then(onGoBack);
+                            }),
+                      ),
+                    ),
+                  );
             }
             return Center(
               child: Stack(
