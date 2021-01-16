@@ -42,8 +42,10 @@ class _ProductEditState extends State<ProductEdit> {
     Product product = widget.product;
     name = product.name;
     price = product.price.toString();
+    description = product.description;
     nameController.text = name;
     priceController.text = price;
+    descriptionController.text = description;
     return Scaffold(
       appBar: AppBar(
         title: Text(projectName),
