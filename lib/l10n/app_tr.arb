@@ -85,8 +85,10 @@
   "@cashMessage": {},
   "selectPaymentQuestion": "Ödeme tipi seçin",
   "@selectPaymentQuestion": {},
-  "ordersToDeliver": "Orders to deliver",
-  "@ordersToDeliver": {}
+  "ordersToDeliver": "Teslim edilecek ürünler",
+  "@ordersToDeliver": {},
+  "amount": "adet",
+  "@amount": {}
 }
 
 
