@@ -23,6 +23,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  firebase_auth: ^0.14.0+5
+  cloud_firestore: ^0.12.9+4
+  provider: ^3.1.0
+  google_maps_flutter: ^1.0.10
+  image_picker: ^0.6.7+21
+  firebase_storage: ^3.0.8
+  location: ^3.2.1
+  fl_chart: ^0.12.2
+  flutter_svg: ^0.18.0
+  flutter_localizations:    
+    sdk: flutter
+  intl: ^0.16.1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -38,6 +50,7 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+  generate: true 
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
