@@ -21,7 +21,7 @@ class _HomeContentState extends State<HomeContent> {
     Widget contentByRole;
     List<Widget> children = List<Widget>();
     if (widget.userData.role == 'admin') {
-      contentByRole = BestSellingChart();
+      contentByRole = Text("");//BestSellingChart();
       children = [
         Padding(
           padding: EdgeInsets.only(left: 10.0),
