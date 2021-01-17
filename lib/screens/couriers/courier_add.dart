@@ -6,7 +6,7 @@ import 'package:order_tracking/services/database.dart';
 import 'courier_add.dart';
 import 'dart:async';
 
-class CourierAdd extends StatefulWidget {  
+class CourierAdd extends StatefulWidget {
   @override
   _CourierAddState createState() => _CourierAddState();
 }
@@ -16,7 +16,7 @@ class _CourierAddState extends State<CourierAdd> {
   @override
   Widget build(BuildContext context) {
     Future<List<UserData>> _customerList = _databaseService.getCustomers();
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text(projectName),
@@ -35,17 +35,20 @@ class _CourierAddState extends State<CourierAdd> {
               customerList.forEach((customer) {
                 List<Widget> buttonChildren = [];
                 children.add(Card(
-                    child: ListTile(
-                  title: Text("${customer.name} ${customer.lastname}"),
-                  tileColor: backgroundColor[25],
-                  trailing:
-                    IconButton(
-                      icon: Icon(Icons.add), 
-                      onPressed: () => {customer.role = 'courier', _databaseService.updateUserData(customer), Navigator.of(context).pop()}
-                    ),
+                  child: ListTile(
+                    title: Text("${customer.name} ${customer.lastname}"),
+                    tileColor: backgroundColor[25],
+                    trailing: IconButton(
+                        icon: Icon(Icons.add),
+                        onPressed: () => {
+                              customer.role = 'courier',
+                              _databaseService.updateUserData(customer),
+                              _databaseService
+                                  .createCourierLocation(customer.uid),
+                              Navigator.of(context).pop()
+                            }),
                   ),
-                )
-                );
+                ));
               });
             } else if (snapshot.hasError) {
               children = <Widget>[
@@ -78,7 +81,7 @@ class _CourierAddState extends State<CourierAdd> {
                   children: children,
                 ),
               );
-            }            
+            }
             return Center(
               child: ListView(
                 children: children,
