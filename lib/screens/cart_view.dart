@@ -8,6 +8,7 @@ import 'package:order_tracking/services/database.dart';
 import 'package:order_tracking/shared/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:location/location.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CartView extends StatefulWidget {
   @override
@@ -17,9 +18,12 @@ class CartView extends StatefulWidget {
 class _CartViewState extends State<CartView> {
   DatabaseService _databaseService = DatabaseService();
   Location location = new Location();
+  
 
   @override
   Widget build(BuildContext context) {
+    final _localizations = AppLocalizations.of(context);
+
     User user = Provider.of<User>(context);
     List<Map<String, int>> latestCartItems = List<Map<String, int>>();
     List<Widget> children = <Widget>[];
@@ -30,7 +34,7 @@ class _CartViewState extends State<CartView> {
         Card(
           child: ListTile(
             title: Text(value.product.name),
-            subtitle: Text(value.amount.toString() + " " +"adet"),
+            subtitle: Text(value.amount.toString() + " " + _localizations.amount),
             leading: Text((value.amount * value.product.price).toString() + "₺"),
             trailing: IconButton(
               icon: Icon(
