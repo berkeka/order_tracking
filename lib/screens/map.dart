@@ -36,8 +36,8 @@ class _MapState extends State<Map> {
     switch (widget.userData.role) {
       case 'customer':
         // Customer will see only the couriers that will deliver them their orders
-        _locations =
-            _databaseService.getCouriersForCustomer(widget.userData.uid);
+        _locStream = _databaseService.getLocationChange();
+        _locations = _databaseService.getCourierLocations();
         break;
       case 'courier':
         // Courier will see only the address the address he/she needs to deliver
@@ -59,11 +59,21 @@ class _MapState extends State<Map> {
             List<Widget> children;
             if (snapshot.hasData) {
               snapshot.data[0].forEach((locData) {
-                _markers.add(Marker(
-                  markerId: MarkerId(locData.uid),
-                  position: LatLng(
-                      locData.location.latitude, locData.location.longitude),
-                ));
+                if (widget.userData.role == 'customer') {
+                  if (locData.customerid == widget.userData.uid) {
+                    _markers.add(Marker(
+                      markerId: MarkerId(locData.uid),
+                      position: LatLng(locData.location.latitude,
+                          locData.location.longitude),
+                    ));
+                  }
+                } else if (widget.userData.role == 'admin') {
+                  _markers.add(Marker(
+                    markerId: MarkerId(locData.uid),
+                    position: LatLng(
+                        locData.location.latitude, locData.location.longitude),
+                  ));
+                }
               });
               snapshot.data[1].listen((QuerySnapshot value) {
                 value.documentChanges.forEach((documentChange) {
@@ -71,13 +81,25 @@ class _MapState extends State<Map> {
                   // If marker for this courier exists
                   // Update or create marker data
                   if (document != null) {
-                    _markers.add(
-                      Marker(
-                        markerId: MarkerId(document.documentID),
-                        position: LatLng(document.data['location'].latitude,
-                            document.data['location'].longitude),
-                      ),
-                    );
+                    if (widget.userData.role == 'customer') {
+                      if (document['customerid'] == widget.userData.uid) {
+                        _markers.add(
+                          Marker(
+                            markerId: MarkerId(document.documentID),
+                            position: LatLng(document.data['location'].latitude,
+                                document.data['location'].longitude),
+                          ),
+                        );
+                      }
+                    } else if (widget.userData.role == 'admin') {
+                      _markers.add(
+                        Marker(
+                          markerId: MarkerId(document.documentID),
+                          position: LatLng(document.data['location'].latitude,
+                              document.data['location'].longitude),
+                        ),
+                      );
+                    }
                   }
                 });
               });

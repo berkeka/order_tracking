@@ -19,5 +19,6 @@ class CourierLocation {
   final String uid;
   GeoPoint location;
   bool hasorder;
-  CourierLocation({this.uid, this.location, this.hasorder});
+  String customerid;
+  CourierLocation({this.uid, this.location, this.hasorder, this.customerid});
 }
