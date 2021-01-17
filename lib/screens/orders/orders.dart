@@ -58,7 +58,7 @@ class _OrdersState extends State<Orders> {
                   color = Colors.green[300];
                   trailing = null;
                 }
-                if(widget.userData.role == 'admin'){
+                if (widget.userData.role == 'admin') {
                   children.add(Card(
                       child: ListTile(
                     title: Text(order.orderid),
@@ -73,23 +73,22 @@ class _OrdersState extends State<Orders> {
                     trailing: trailing,
                     tileColor: backgroundColor[25],
                   )));
-                }
-                else if(widget.userData.role == 'courier'){
-                  if(order.courierid == widget.userData.uid){
+                } else if (widget.userData.role == 'courier') {
+                  if (order.courierid == widget.userData.uid) {
                     children.add(Card(
-                      child: ListTile(
-                    title: Text(order.orderid),
-                    subtitle: Text(_localizations.orderDate +
-                        ": " +
-                        order.orderdate.toString()),
-                    leading: Icon(
-                      Icons.circle,
-                      color: color,
-                      size: 45,
-                    ),
-                    trailing: trailing,
-                    tileColor: backgroundColor[25],
-                  )));
+                        child: ListTile(
+                      title: Text(order.orderid),
+                      subtitle: Text(_localizations.orderDate +
+                          ": " +
+                          order.orderdate.toString()),
+                      leading: Icon(
+                        Icons.circle,
+                        color: color,
+                        size: 45,
+                      ),
+                      trailing: trailing,
+                      tileColor: backgroundColor[25],
+                    )));
                   }
                 }
               });

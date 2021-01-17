@@ -84,7 +84,9 @@
   "cashMessage": "Peşin",
   "@cashMessage": {},
   "selectPaymentQuestion": "Ödeme tipi seçin",
-  "@selectPaymentQuestion": {}
+  "@selectPaymentQuestion": {},
+  "ordersToDeliver": "Orders to deliver",
+  "@ordersToDeliver": {}
 }
 
 

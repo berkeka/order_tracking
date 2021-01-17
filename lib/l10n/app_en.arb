@@ -84,5 +84,7 @@
   "cashMessage": "Cash",
   "@cashMessage": {},
   "selectPaymentQuestion": "Select a paymemt",
-  "@selectPaymentQuestion": {}
+  "@selectPaymentQuestion": {},
+  "ordersToDeliver": "Orders to deliver",
+  "@ordersToDeliver": {}
 }
