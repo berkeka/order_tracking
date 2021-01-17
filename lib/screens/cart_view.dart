@@ -23,13 +23,15 @@ class _CartViewState extends State<CartView> {
     User user = Provider.of<User>(context);
     List<Map<String, int>> latestCartItems = List<Map<String, int>>();
     List<Widget> children = <Widget>[];
+    double sum = 0;
     c.Cart.cartItems.forEach((key, value) {
       latestCartItems.add({key: value.amount});
       children.add(
         Card(
           child: ListTile(
             title: Text(value.product.name),
-            subtitle: Text(value.amount.toString()),
+            subtitle: Text(value.amount.toString() + " " +"adet"),
+            leading: Text((value.amount * value.product.price).toString() + "₺"),
             trailing: IconButton(
               icon: Icon(
                 Icons.remove_circle,
@@ -49,6 +51,7 @@ class _CartViewState extends State<CartView> {
           ),
         ),
       );
+      sum += (value.amount * value.product.price);
     });
 
     return Scaffold(
@@ -60,12 +63,16 @@ class _CartViewState extends State<CartView> {
         body: Wrap(
           children: [
             Container(
-              height: MediaQuery.of(context).size.height * 0.80,
+              height: MediaQuery.of(context).size.height * 0.78,
               child: Center(
                 child: ListView(
                   children: children,
                 ),
               ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: Text(sum.toString() + "₺"),
             ),
             Container(
               alignment: Alignment.center,
@@ -84,7 +91,8 @@ class _CartViewState extends State<CartView> {
                           latestCartItems,
                           user.uid,
                           GeoPoint(
-                              _locationData.latitude, _locationData.longitude));
+                              _locationData.latitude, _locationData.longitude),
+                              sum);
                           latestCartItems.clear();
                           c.Cart.cartItems.clear();
                           Navigator.of(context).pop();
