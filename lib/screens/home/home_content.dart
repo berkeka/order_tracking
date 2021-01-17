@@ -55,51 +55,23 @@ class _HomeContentState extends State<HomeContent> {
         ),
       ];
     } else if (widget.userData.role == 'courier') {
-      contentByRole = (
-        Column(
-          children: [
-            Container(
-              padding: EdgeInsets.all(15.0),
-              child: ElevatedButton(
-                child: Text("Orders"),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Orders(
-                        userData: widget.userData
-                      ))
-                    );
-                },
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.all(15.0),
-              child: ElevatedButton(
-                child: Text("Satış tamamla"),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CompleteSale(
-                        userData: widget.userData
-                      ))
-                    );
-                },
-              ),
-            ),
-          ],
-        )
+      return Scaffold(
+        body: CompleteSale(
+          userData: widget.userData,
+        ),
       );
-    } else {contentByRole = Text("");}
+    } else {
+      contentByRole = Text("");
+    }
     return Scaffold(
       backgroundColor: backgroundColor[50],
-      body: Column(children: [
-        Row(
-          children: children,
+      body: Column(
+        children: [
+          Row(
+            children: children,
           ),
-        contentByRole
-      ],
+          contentByRole
+        ],
       ),
     );
   }

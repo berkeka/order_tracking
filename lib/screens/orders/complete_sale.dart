@@ -3,11 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:order_tracking/models/user.dart';
 import 'package:order_tracking/models/order.dart';
-import 'package:order_tracking/screens/couriers/choose_courier.dart';
 import 'package:order_tracking/shared/constants.dart';
 import 'package:order_tracking/services/database.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 class CompleteSale extends StatefulWidget {
   final UserData userData;
@@ -31,20 +29,32 @@ class _CompleteSaleState extends State<CompleteSale> {
     Widget debitButton = FlatButton(
       child: Text(_localizations.debitMessage),
       onPressed: () {
-        _databaseService.orderCollection.document(selectedOrderID).get().then((value) => {
-          _databaseService.courierLocationCollection.document(value.data["courierid"]).updateData({"customerid": ""})
-        });
-        _databaseService.orderCollection.document(selectedOrderID).updateData({"isdelivered": true, "paymentoption": "debit", "courierid": ""});
+        _databaseService.orderCollection
+            .document(selectedOrderID)
+            .get()
+            .then((value) => {
+                  _databaseService.courierLocationCollection
+                      .document(value.data["courierid"])
+                      .updateData({"customerid": ""})
+                });
+        _databaseService.orderCollection.document(selectedOrderID).updateData(
+            {"isdelivered": true, "paymentoption": "debit", "courierid": ""});
         Navigator.of(context).pop();
       },
     );
     Widget cashButton = FlatButton(
       child: Text(_localizations.cashMessage),
       onPressed: () {
-        _databaseService.orderCollection.document(selectedOrderID).get().then((value) => {
-          _databaseService.courierLocationCollection.document(value.data["courierid"]).updateData({"customerid": ""})
-        });
-        _databaseService.orderCollection.document(selectedOrderID).updateData({"isdelivered": true, "paymentoption": "cash", "courierid": ""});
+        _databaseService.orderCollection
+            .document(selectedOrderID)
+            .get()
+            .then((value) => {
+                  _databaseService.courierLocationCollection
+                      .document(value.data["courierid"])
+                      .updateData({"customerid": ""})
+                });
+        _databaseService.orderCollection.document(selectedOrderID).updateData(
+            {"isdelivered": true, "paymentoption": "cash", "courierid": ""});
         Navigator.of(context).pop();
       },
     );
@@ -60,11 +70,6 @@ class _CompleteSaleState extends State<CompleteSale> {
 
     Future<List<Order>> _orderList = _databaseService.getOrders();
     return Scaffold(
-      appBar: AppBar(
-        title: Text(projectName),
-        backgroundColor: backgroundColor[400],
-        elevation: 0.0,
-      ),
       backgroundColor: backgroundColor[50],
       body: Container(
         child: FutureBuilder<List<Order>>(
@@ -76,7 +81,7 @@ class _CompleteSaleState extends State<CompleteSale> {
               List<Order> orderList = snapshot.data;
               orderList.forEach((order) {
                 List<Widget> buttonChildren = [];
-                if(order.courierid == widget.userData.uid){
+                if (order.courierid == widget.userData.uid) {
                   buttonChildren.add(
                     IconButton(
                       icon: Icon(
@@ -94,7 +99,7 @@ class _CompleteSaleState extends State<CompleteSale> {
                       },
                     ),
                   );
-                    children.add(Card(
+                  children.add(Card(
                       child: ListTile(
                     title: Text(order.orderid),
                     subtitle: Text(_localizations.orderDate +
@@ -105,7 +110,7 @@ class _CompleteSaleState extends State<CompleteSale> {
                       children: buttonChildren,
                     ),
                   )));
-                  }
+                }
               });
             } else if (snapshot.hasError) {
               children = <Widget>[
@@ -139,10 +144,27 @@ class _CompleteSaleState extends State<CompleteSale> {
                 ),
               );
             }
-            return Center(
-              child: ListView(
-                children: children,
-              ),
+            return Wrap(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.07,
+                  child: Center(
+                    child: Text(
+                      _localizations.ordersToDeliver,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                  ),
+                ),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.8,
+                  child: Center(
+                    child: ListView(
+                      children: children,
+                    ),
+                  ),
+                ),
+              ],
             );
           },
         ),
