@@ -32,6 +32,9 @@ class _CouriersState extends State<Couriers> {
       onPressed: () {
         selectedCourierData.role = 'customer';
         _databaseService.updateUserData(selectedCourierData);
+        _databaseService.courierLocationCollection
+            .document(selectedCourierData.uid)
+            .delete();
         Navigator.of(context).pop();
       },
     );
@@ -82,8 +85,8 @@ class _CouriersState extends State<Couriers> {
                         ).then(onGoBack);
                       },
                     ),
-                  );                                    
-                }                
+                  );
+                }
                 children.add(Card(
                     child: ListTile(
                   title: Text("${courier.name} ${courier.lastname}"),
@@ -127,31 +130,31 @@ class _CouriersState extends State<Couriers> {
             }
             if (widget.userData.role == 'admin') {
               finalChildren.add(
-                    Positioned(
-                      left: 10.0,
-                      bottom: 10.0,
-                      child: Container(
-                        width: 75.0,
-                        height: 75.0,
-                        child: IconButton(
-                            padding: const EdgeInsets.all(0),
-                            icon: Icon(
-                              Icons.add_box,
-                              color: backgroundColor[400],
-                              size: 70,
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        // Add courier page
-                                        CourierAdd()),
-                              ).then(onGoBack);
-                            }),
-                      ),
-                    ),
-                  );
+                Positioned(
+                  left: 10.0,
+                  bottom: 10.0,
+                  child: Container(
+                    width: 75.0,
+                    height: 75.0,
+                    child: IconButton(
+                        padding: const EdgeInsets.all(0),
+                        icon: Icon(
+                          Icons.add_box,
+                          color: backgroundColor[400],
+                          size: 70,
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    // Add courier page
+                                    CourierAdd()),
+                          ).then(onGoBack);
+                        }),
+                  ),
+                ),
+              );
             }
             return Center(
               child: Stack(
