@@ -78,14 +78,15 @@ class DatabaseService {
   }
 
   Future createOrder(List<Map<String, int>> products, String customerID,
-      GeoPoint customerLocation) async {
+      GeoPoint customerLocation, double sum) async {
     await orderCollection.document().setData({
       'courierid': "",
       'customerid': customerID,
       'isdelivered': false,
       'deliverylocation': customerLocation,
       'orderdate': Timestamp.fromDate(DateTime.now()),
-      'products': products
+      'products': products,
+      'sum' : sum.toString()
     });
   }
 
