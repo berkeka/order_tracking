@@ -86,7 +86,7 @@ class DatabaseService {
       'deliverylocation': customerLocation,
       'orderdate': Timestamp.fromDate(DateTime.now()),
       'products': products,
-      'sum' : sum.toString()
+      'sum': sum.toString()
     });
   }
 
@@ -180,10 +180,10 @@ class DatabaseService {
     await courierLocationCollection.getDocuments().then((snapshot) {
       snapshot.documents.forEach((document) {
         _courierLocations.add(CourierLocation(
-          uid: document.documentID,
-          location: document.data['location'],
-          hasorder: document.data['hasorder'],
-        ));
+            uid: document.documentID,
+            location: document.data['location'],
+            hasorder: document.data['hasorder'],
+            customerid: document.data['customerid']));
       });
     });
     return _courierLocations;
