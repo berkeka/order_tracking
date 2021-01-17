@@ -29,6 +29,15 @@ class _ChooseCourierState extends State<ChooseCourier> {
       child: Text(_localizations.continueMessage),
       onPressed: () {
         Order newOrder = widget.order;
+        _databaseService.orderCollection
+            .document(newOrder.orderid)
+            .get()
+            .then((result) {
+          _databaseService.courierLocationCollection
+              .document(selectedCourierID)
+              .updateData(
+                  {"customerid": newOrder.customerid, "hasorder": true});
+        });
         newOrder.courierid = selectedCourierID;
         _databaseService.updateOrderData(newOrder);
         Navigator.of(context).pop();
