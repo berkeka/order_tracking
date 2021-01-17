@@ -78,7 +78,13 @@
   "photoLibrary": "Fotoğraf albümü",
   "@photoLibrary": {},
   "complete": "Tamamlandı",
-  "@complete": {}
+  "@complete": {},
+  "debitMessage": "Kredi kartı",
+  "@debitMessage": {},
+  "cashMessage": "Peşin",
+  "@cashMessage": {},
+  "selectPaymentQuestion": "Ödeme tipi seçin",
+  "@selectPaymentQuestion": {}
 }
 
 
