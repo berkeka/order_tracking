@@ -78,5 +78,11 @@
   "photoLibrary": "Photo Library",
   "@photoLibrary": {},
   "complete": "Complete",
-  "@complete": {}
+  "@complete": {},
+  "debitMessage": "Credit Card",
+  "@debitMessage": {},
+  "cashMessage": "Cash",
+  "@cashMessage": {},
+  "selectPaymentQuestion": "Select a paymemt",
+  "@selectPaymentQuestion": {}
 }

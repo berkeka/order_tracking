@@ -82,7 +82,7 @@ class _HomeContentState extends State<HomeContent> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => CompleteSale(
-                        //userData: widget.userData
+                        userData: widget.userData
                       ))
                     );
                 },
